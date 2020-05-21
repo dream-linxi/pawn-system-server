@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dreams.base.dao.WareHouseDao">
+
+    <!-- 新增仓库信息 -->
+    <insert id="addWareHouseInfo">
+        insert into c_pawn_warehouse(WH_CODE,WH_NAME,CONTACT,PHONE_NO,ADDRESS,WH_STAT)
+        values (#{whCode},#{whName},#{contact},#{phoneNo},#{address},#{whStat});
+    </insert>
+
+    <!-- 更新仓库状态 -->
+    <update id="updateWareHouseStat" >
+        update
+            c_pawn_warehouse
+        set
+            WH_STAT = #{whStat}
+        where
+            WH_CODE = #{whCode}
+    </update>
+
+    <!-- 更新仓库信息 -->
+    <update id="updateWareHouseInfo" parameterType="com.dreams.base.po.WareHousePo">
+        update
+            c_pawn_warehouse
+        set
+            WH_NAME=#{whName},
+            CONTACT=#{contact},
+            PHONE_NO=#{phoneNo},
+            ADDRESS=#{address},
+            WH_STAT=#{whStat}
+        where
+            WH_CODE=#{whCode}
+    </update>
+
+    <!-- 根据仓库编号删除中间表信息 -->
+    <delete id="deleteShopAndWareHouseByWhCodes">
+        delete from c_pawn_shop_wh_rel where WH_CODE in
+        <foreach collection="array" open="(" close=")" item="whCode" separator=",">
+            #{whCode}
+        </foreach>
+    </delete>
+
+    <!-- 根据仓库编号删除对应数据 -->
+    <delete id="deleteWareHouseByWhCodes">
+        delete from c_pawn_warehouse where WH_CODE in
+        <foreach collection="array" open="(" close=")" item="whCode" separator=",">
+            #{whCode}
+        </foreach>
+    </delete>
+
+    <!-- 查询所有仓库信息 -->
+    <select id="getAllWareHouseInfo"
+            resultType="com.dreams.base.po.WareHousePo"
+            parameterType="com.dreams.base.bo.WareHouseBo">
+        select
+            cpw.WH_CODE as "whCode",
+            cpw.WH_NAME as "whName",
+            cpw.CONTACT as "contact",
+            cpw.PHONE_NO as "phoneNo",
+            cpw.ADDRESS as "address",
+            cpw.WH_STAT as "whStat",
+            GROUP_CONCAT(cps.SHOP_NAME) as "shops"
+        from
+            c_pawn_warehouse cpw
+        LEFT JOIN
+            c_pawn_shop_wh_rel cpswr
+        on
+            cpw.WH_CODE = cpswr.WH_CODE
+        LEFT JOIN
+            c_pawn_shop cps
+        on
+            cps.SHOP_CODE = cpswr.SHOP_CODE
+        <where>
+            <if test="keyWord != null and keyWord != ''">
+                and (
+                cpw.WH_CODE like '%${keyWord}%'
+                or cpw.WH_NAME like '%${keyWord}%'
+                or cpw.CONTACT like '%${keyWord}%'
+                or cpw.ADDRESS like '%${keyWord}%'
+                )
+            </if>
+            <if test="whStat != null and whStat != ''">
+                and cpw.WH_STAT = #{whStat}
+            </if>
+        </where>
+        group by
+        cpw.WH_CODE
+    </select>
+
+    <!-- 查看当前编号的仓库信息记录条数 -->
+    <select id="getShopInfoByShopCode" resultType="java.lang.Integer">
+        select
+            count(*)
+        from
+            c_pawn_warehouse
+        where
+            WH_CODE = #{whCode}
+    </select>
+
+
+</mapper>

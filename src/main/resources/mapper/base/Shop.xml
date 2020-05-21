@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dreams.base.dao.ShopDao">
+    <!-- 添加门店基本信息 -->
+    <insert id="addShopInfo" parameterType="com.dreams.base.po.ShopPo">
+        insert into c_pawn_shop(SHOP_CODE,SHOP_NAME,CONTACT,PHONE_NO,ADDRESS,SHOP_STAT)
+        values (#{shopCode},#{shopName},#{contact},#{phoneNo},#{address},#{shopStat});
+    </insert>
+
+    <!-- 中间表数据添加 -->
+    <insert id="addShopAndWareHouse">
+        insert into c_pawn_shop_wh_rel(SHOP_CODE,WH_CODE)
+        values (#{shopCode},#{whCode})
+    </insert>
+
+    <!-- 更新门店的状态 -->
+    <update id="updateShopStat">
+        update
+            c_pawn_shop
+        set
+            SHOP_STAT = #{shopStat}
+        where
+            SHOP_CODE = #{shopCode}
+    </update>
+
+    <!-- 更新门店基本信息 -->
+    <update id="updateShopInfo">
+        update
+            c_pawn_shop
+        set
+            SHOP_NAME=#{shopName},
+            CONTACT=#{contact},
+            PHONE_NO=#{phoneNo},
+            ADDRESS=#{address},
+            SHOP_STAT=#{shopStat}
+        where
+            SHOP_CODE=#{shopCode}
+    </update>
+
+    <!-- 删除对应门店中间表信息 -->
+    <delete id="deleteShopAndWareHouse">
+        delete from c_pawn_shop_wh_rel where SHOP_CODE=#{shopCode}
+    </delete>
+
+    <!-- 根据门店编号删除中间表信息 -->
+    <delete id="deleteShopAndWareHouseByShopCodes">
+        delete from c_pawn_shop_wh_rel where SHOP_CODE in
+        <foreach collection="array" open="(" close=")" item="shopCode" separator=",">
+            #{shopCode}
+        </foreach>
+    </delete>
+
+    <!-- 根据门店标号删除门店信息 -->
+    <delete id="deleteShopInfoByShopCodes">
+        delete from c_pawn_shop where SHOP_CODE in
+        <foreach collection="array" open="(" close=")" item="shopCode" separator=",">
+            #{shopCode}
+        </foreach>
+    </delete>
+
+    <!-- 获取所有门店信息 -->
+    <select id="getAllShopInfo"
+            resultType="com.dreams.base.po.ShopPo"
+            parameterType="com.dreams.base.bo.ShopBo">
+        select
+            cps.SHOP_CODE as "shopCode",
+            cps.SHOP_NAME as "shopName",
+            cps.CONTACT as "contact",
+            cps.PHONE_NO as "phoneNo",
+            cps.ADDRESS as "address",
+            cps.SHOP_STAT as "shopStat",
+            GROUP_CONCAT(cpw.WH_NAME) as "wareHouses"
+        from
+            c_pawn_shop cps
+        LEFT JOIN
+            c_pawn_shop_wh_rel cpswr
+        on
+            cps.SHOP_CODE = cpswr.SHOP_CODE
+        LEFT JOIN
+            c_pawn_warehouse cpw
+        on
+            cpw.WH_CODE = cpswr.WH_CODE
+	    <where>
+            <if test="keyWord != null and keyWord != ''">
+                and (
+                    cps.SHOP_CODE like '%${keyWord}%'
+                    or cps.CONTACT like '%${keyWord}%'
+                    or cps.PHONE_NO like '%${keyWord}%'
+                    or cps.ADDRESS like '%${keyWord}%'
+                )
+            </if>
+            <if test="shopStat != null and shopStat != ''">
+                and cps.SHOP_STAT = #{shopStat}
+            </if>
+        </where>
+
+	    group by
+            cps.SHOP_CODE
+    </select>
+
+    <!-- 获取所有仓库信息 -->
+    <select id="getAllWareHouse" resultType="com.dreams.base.po.WareHousePo">
+        select
+            WH_CODE as "whCode",
+            WH_NAME as "whName",
+            CONTACT as "contact",
+            PHONE_NO as "phoneNo",
+            ADDRESS as "address",
+            WH_STAT as "whStat"
+        from
+            c_pawn_warehouse
+    </select>
+
+    <!-- 查看当前编号的门店信息记录条数 -->
+    <select id="getShopInfoByShopCode" resultType="java.lang.Integer">
+        select
+            count(*)
+        from
+            c_pawn_shop
+        where
+            SHOP_CODE = #{shopCode}
+    </select>
+
+    <select id="getWareHouseByShopCode"  resultType="java.lang.String">
+        select WH_CODE from c_pawn_shop_wh_rel where SHOP_CODE = #{shopCode}
+    </select>
+
+</mapper>

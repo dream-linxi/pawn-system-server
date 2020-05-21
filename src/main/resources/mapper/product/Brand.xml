@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dreams.product.dao.BrandDao">
+
+    <!-- 新增品牌信息 -->
+    <insert id="addBrandInfo" parameterType="com.dreams.product.po.BrandPo">
+        insert into c_pawn_brand(BRAND_CODE,BRAND_NAME,F_LETTER,BRAND_DESC,IS_SHOW,SORT_NO)
+        values (#{brandCode},#{brandName},#{fletter},#{brandDesc},#{isShow},#{sortNo})
+    </insert>
+
+    <!-- 向品牌和分类中间表新增数据 -->
+    <insert id="addBrandAndCatInfo">
+        insert into c_pawn_brand_cat_rel(BRAND_CODE,CAT_CODE)
+        values (#{brandCode},#{catCode});
+    </insert>
+
+    <!-- 更新品牌信息 -->
+    <update id="updateBrandInfo" parameterType="com.dreams.product.po.BrandPo">
+        update
+            c_pawn_brand
+        set
+            BRAND_NAME = #{brandName},
+            F_LETTER = #{fletter},
+            BRAND_DESC = #{brandDesc},
+            IS_SHOW = #{isShow},
+            SORT_NO = #{sortNo}
+        where
+            BRAND_CODE = #{brandCode}
+    </update>
+
+    <!-- 删除对应品牌中间表数据 -->
+    <delete id="deleteBrandAndCatInfoByBrandCode">
+        delete from c_pawn_brand_cat_rel where BRAND_CODE = #{brandCode}
+    </delete>
+
+    <!-- 删除品牌数据 -->
+    <delete id="deleteBrandInfoByBrandCodes">
+        delete from c_pawn_brand where BRAND_CODE in
+        <foreach collection="array" open="(" close=")" separator="," item="brandCode">
+            #{brandCode}
+        </foreach>
+    </delete>
+
+    <!-- 获取所有品牌信息 -->
+    <select id="getAllBranInfo" resultType="com.dreams.product.po.BrandPo"
+            parameterType="com.dreams.product.bo.BrandBo">
+        select
+            BRAND_CODE as "brandCode",
+            BRAND_NAME as "brandName",
+            F_LETTER as "fletter",
+            BRAND_DESC as "brandDesc",
+            IS_SHOW as "isShow",
+            SORT_NO as "sortNo"
+        from
+            c_pawn_brand
+        <where>
+            <if test="keyWord != null and keyWord != ''">
+                and (
+                BRAND_CODE like '%${keyWord}%'
+                or BRAND_NAME like '%${keyWord}%'
+                or F_LETTER like '%${keyWord}%'
+                or BRAND_DESC like '%${keyWord}%'
+                )
+            </if>
+        </where>
+    </select>
+
+    <!-- 统计当前编号的品牌记录数 -->
+    <select id="checkBrandCode" resultType="java.lang.Integer">
+        select count(*) from c_pawn_brand where BRAND_CODE = #{brandCode}
+    </select>
+
+    <!-- 根据品牌编号获取关联的一级分类编号 -->
+    <select id="getAllCatCodeByBrandCode" resultType="java.lang.String">
+        select CAT_CODE from c_pawn_brand_cat_rel where BRAND_CODE=#{brandCode}
+    </select>
+</mapper>

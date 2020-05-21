@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../../layui/css/layui.css">
+    <link rel="stylesheet" href="./css/ware-house.css">
+    <script src="../../js/jquery-1.10.1.js"></script>
+</head>
+<body>
+<div id="app">
+    <!-- 搜索部分 -->
+    <header>
+        <form id="searchForm" class="layui-form">
+            <div class="layui-form-item">
+                <label class="layui-form-label">状态</label>
+                <div class="layui-input-inline">
+                    <select id="whStat" name="whStat">
+                        <option value="">全部</option>
+                        <option value="1">开业</option>
+                        <option value="0">停业</option>
+                    </select>
+                </div>
+                <label class="layui-form-label">关键字</label>
+                <div class="layui-input-inline">
+                    <input id="keyWord" type="text" name="keyWord" class="layui-input">
+                </div>
+                <button onclick="searchWareHouseInfoByCondition()" type="button" class="layui-btn">搜索</button>
+            </div>
+        </form>
+    </header>
+
+    <!-- 数据显示部分 -->
+    <section>
+        <div class="content-body">
+            <table class="layui-hide" id="wareHouseTable" lay-filter="wareHouseTable"></table>
+        </div>
+    </section>
+</div>
+
+<!-- 表格工具栏 -->
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="showAddWareHouseWin">新增</button>
+        <button class="layui-btn layui-btn-sm" lay-event="showUpdateWareHouseWin">修改</button>
+        <button class="layui-btn layui-btn-sm" lay-event="deleteWareHouseByWhCodes">删除</button>
+    </div>
+</script>
+
+<!-- 单选框(状态)切换 -->
+<script type="text/html" id="wareHouseStatBar">
+    <!-- 这里的 checked 的状态只是演示 -->
+    <input type="checkbox" name="whStat" value="{{d.whCode}}" lay-skin="switch" lay-text="使用|停用"
+           lay-filter="wareHouseStatDemo" {{!d.whStat ? '':'checked' }}>
+</script>
+
+
+<!-- 新增仓库信息面板 -->
+<div id="addWareHouseInfoWin" class="layui-card">
+    <form id="addWareHouseInfoForm" class="layui-form" action="">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">仓库编号</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="whCode" lay-verify="required|checkWhCode" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">仓库名称</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="whName" lay-verify="required" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">联系人</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="contact" lay-verify="required" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">联系方式</label>
+                <div class="layui-input-inline">
+                    <input type="tel" name="phoneNo" lay-verify="required|phone" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">地址</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="address" style="width: 350px;" lay-verify="required" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">状态</label>
+            <div class="layui-input-block">
+                <input type="radio" name="whStat" value="1" title="启用" checked="">
+                <input type="radio" name="whStat" value="0" title="停用">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button onclick="addWareHouseInfo()" type="button" class="layui-btn" lay-submit=""
+                        lay-filter="addWareHouseInfoBtn">立即提交
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<!-- 修改仓库信息面板 -->
+<div id="updateWareHouseInfoWin" class="layui-card">
+    <form id="updateWareHouseInfoForm" class="layui-form" lay-filter="updateShopInfoFilter" action="">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">仓库编号</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="whCode" lay-verify="required" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">仓库名称</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="whName" lay-verify="required" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">联系人</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="contact" lay-verify="required" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">联系方式</label>
+                <div class="layui-input-inline">
+                    <input type="tel" name="phoneNo" lay-verify="required|phone" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">地址</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="address" style="width: 350px;" lay-verify="required" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">状态</label>
+            <div class="layui-input-block">
+                <input type="radio" name="whStat" value="1" title="启用" checked="">
+                <input type="radio" name="whStat" value="0" title="停用">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button onclick="updateWareHouseInfo()" type="button" class="layui-btn" lay-submit=""
+                        lay-filter="updateWareHouseInfoBtn">立即提交
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- layui js -->
+<script src="https://cdn.bootcdn.net/ajax/libs/less.js/3.11.1/less.js"></script>
+<script src="../../layui/layui.all.js"></script>
+<script src="./js/ware-house.js"></script>
+</body>
+</html>

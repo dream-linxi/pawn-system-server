@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./layui/css/layui.css">
+    <script src="./js/jquery-1.10.1.js"></script>
+</head>
+
+<body style="background-color: gainsboro;">
+    <div style="background-color: #fff;width: 450px;line-height: 50px;margin: 50px auto;">
+        <div class="layui-inline">
+            <label class="layui-form-label" style="line-height: 32px;font-size: 18px;">账号绑定</label>
+            <div class="layui-input-inline">
+                <input id="username" type="text" name="username" autocomplete="off" class="layui-input">
+                <input id="password" type="password" name="password" autocomplete="off" class="layui-input">
+            </div>
+            <button type="button" onclick="bangdingQQ()" class="layui-btn" style="margin-left: 15px;">绑定账号</button>
+        </div>
+
+    </div>
+</body>
+<script src="./layui/layui.all.js"></script>
+<script>
+    const USER_KEY = 'user_key';
+    function bangdingQQ() {
+
+        layui.use('layer', function () { //独立版的layer无需执行这一句
+            var $ = layui.jquery,
+                layer = layui.layer; //独立版的layer无需执行这一句
+
+            let username = $("#username").val();
+            if (username != null && username != "") {
+                $.post('/bangdingQQ', { "username": $("#username").val(),"password": $("#password").val() }, function (data) {
+                    if (data.state == 1) {
+                        localStorage.setItem(USER_KEY,JSON.stringify(data.data.username));
+                        layer.alert(data.msg);
+                        //location.href = "/index.html?username=" + $('#uname').val();
+                        location.href = "/index.html";
+                    }else{
+                        layer.alert(data.msg);
+                    }
+                }, 'json')
+            }else {
+                layer.alert("用户名不能为空!!!");
+            }
+
+        });
+
+    }
+</script>
+
+</html>

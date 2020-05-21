@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../common/reset.css">
+    <link rel="stylesheet" href="../layui/css/layui.css">
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/user.css">
+    <script src="../js/jquery-1.10.1.js"></script>
+    <title></title>
+</head>
+
+<body>
+    <div id="app">
+        <header>
+            <form action="">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">关键字</label>
+                        <div class="layui-input-inline">
+                            <input id="keyword" type="text" name="keyword" lay-verify="required|number"
+                                autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="layui-inline">
+                        <label class="layui-form-label">开始日期</label>
+                        <div class="layui-input-inline">
+                            <input id="createStartTime" type="text" name="createStartTime" lay-verify="date"
+                                placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="layui-inline">
+                        <label class="layui-form-label">结束日期</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="createEndTime" id="createEndTime" lay-verify="date"
+                                placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <button type="button" onclick="searchUserByCondition()" class="layui-btn">搜索</button>
+                    </div>
+                </div>
+            </form>
+        </header>
+        <section>
+            <div class="content-body">
+                <table class="layui-hide" id="test" lay-filter="test"></table>
+            </div>
+        </section>
+    </div>
+
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-xs" lay-event="assigneeRole">分配角色</a>
+    </script>
+
+    <script type="text/html" id="toolbarDemo">
+        <div class="layui-btn-container">
+          <button class="layui-btn" lay-event="showAddUserWin">新增用户</button>
+          <button class="layui-btn" lay-event="showUpdateUserWin">修改用户</button>
+          <button class="layui-btn" lay-event="deleteUser">删除用户</button>
+        </div>
+    </script>
+
+
+    <!-- 新增用户面板 -->
+    <div class="layui-card addUserCard" id="addUserDiv">
+        <form id="userForm" class="layui-form">
+            <div class="layui-form-item">
+                <label class="layui-form-label">用户编号</label>
+                <div class="layui-input-inline">
+                    <input id="userId" type="text" name="userId" lay-verify="required|checkUserId" autocomplete="off"
+                        class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">用户姓名</label>
+                <div class="layui-input-inline">
+                    <input id="userName" type="text" name="userName" lay-verify="required" autocomplete="off"
+                        class="layui-input">
+                </div>
+
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">账号密码</label>
+                    <div class="layui-input-inline">
+                        <input id="password" type="password" name="password" lay-verify="required|password"
+                            autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">性别</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="sex" value="男" title="男" checked="">
+                    <input type="radio" name="sex" value="女" title="女">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">手机号码</label>
+                    <div class="layui-input-inline">
+                        <input id="phone" type="text" name="phone" lay-verify="phone|checkPhone" autocomplete="off"
+                            class="layui-input">
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">QQ号码</label>
+                    <div class="layui-input-inline">
+                        <input id="qqCode" type="text" name="qqCode" lay-verify="number" autocomplete="off"
+                            class="layui-input">
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button onclick="addUser()" class="layui-btn" lay-submit="" lay-filter="addUserBtn">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- 修改用户面板 -->
+    <div class="layui-card updateUserCard" id="updateUserDiv">
+        <form id="updateUserForm" lay-filter="userUpdateFormTest" class="layui-form">
+            <div class="layui-form-item">
+                <label class="layui-form-label">用户编号</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="userId" readonly="readonly" autocomplete="off"
+                        class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">用户姓名</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="userName" lay-verify="required" autocomplete="off"
+                        class="layui-input">
+                </div>
+
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">账号密码</label>
+                    <div class="layui-input-inline">
+                        <input type="password" name="password" lay-verify="required|password"
+                            autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">性别</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="sex" value="男" title="男" checked="">
+                    <input type="radio" name="sex" value="女" title="女">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">手机号码</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="phone" lay-verify="phone|checkUpdatePhone" autocomplete="off"
+                            class="layui-input">
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">QQ号码</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="qqCode" lay-verify="" autocomplete="off"
+                            class="layui-input">
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button onclick="updateUser()" class="layui-btn" lay-submit="" lay-filter="updateUserBtn">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- layui js -->
+    <script src="https://cdn.bootcdn.net/ajax/libs/less.js/3.11.1/less.js"></script>
+    <script src="js/user.js"></script>
+    <script src="../layui/layui.all.js"></script>
+    <!-- <script src="../layui/layui.js"></script> -->
+</body>
+
+</html>

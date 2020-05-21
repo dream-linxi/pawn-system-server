@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dreams.sys.dao.UserDao">
+    <sql id="userAlias">
+        USER_ID as "userId",
+        USER_NAME as "userName",
+        PASSWORD as "password",
+        SEX as "sex",
+        PHONE as "phone",
+        QQ_CODE as "qqCode",
+        IS_ADMIN as "isAdmin",
+        IS_DEL as "isDel",
+        CREATE_TIME as "createTime",
+        CREATE_BY as "createBy",
+        COMMENT as "comment",
+        MODIFY_BY as "modifyBy",
+        MODIFY_TIME as "modifyTime"
+    </sql>
+
+    <select id="getUserByUserId" resultType="com.dreams.sys.po.UserPo">
+        select <include refid="userAlias"></include>
+        from sys_user
+        where USER_ID=#{userId}
+    </select>
+
+    <select id="getAllUser" parameterType="com.dreams.sys.bo.UserBo" resultType="com.dreams.sys.po.UserPo">
+        select <include refid="userAlias"></include>
+        from sys_user
+        <where>
+            <if test="keyWord != null and keyWord != ''">
+                and (USER_ID like '%${keyWord}%'
+                or USER_NAME like '%${keyWord}%'
+                or SEX like '%${keyWord}%'
+                or PHONE like '%${keyWord}%'
+                or QQ_CODE like '%${keyWord}%'
+                or COMMENT like '%${keyWord}%')
+            </if>
+            <if test="createStartTime != null and createStartTime != ''">
+                and CREATE_TIME &gt;= #{createStartTime}
+            </if>
+            <if test="createEndTime != null and createEndTime != ''">
+                and CREATE_TIME &lt;= #{createEndTime}
+            </if>
+        </where>
+        order by
+            CREATE_TIME desc
+    </select>
+
+    <insert id="addUser" parameterType="com.dreams.sys.po.UserPo">
+        insert into sys_user(USER_ID,
+        USER_NAME,
+        PASSWORD,
+        SEX,
+        PHONE,
+        QQ_CODE,
+        IS_ADMIN,
+        IS_DEL,
+        CREATE_TIME,
+        CREATE_BY,
+        COMMENT,
+        MODIFY_BY,
+        MODIFY_TIME)
+        values (#{userId},#{userName},#{password},#{sex},#{phone},#{qqCode},#{isAdmin},
+        #{isDel},#{createTime},#{createBy},#{comment},#{modifyBy},#{modifyTime})
+    </insert>
+
+    <delete id="deleteUserByUserIds">
+        delete from sys_user
+        <where>
+            USER_ID in
+            <foreach collection="array" separator="," item="userId" open="(" close=")">
+                #{userId}
+            </foreach>
+        </where>
+    </delete>
+
+    <update id="updateUserByUserId" parameterType="com.dreams.sys.po.UserPo">
+        update sys_user set
+        USER_NAME=#{userName},
+        PASSWORD=#{password},
+        SEX=#{sex},
+        PHONE=#{phone},
+        QQ_CODE=#{qqCode},
+        IS_ADMIN=#{isAdmin},
+        COMMENT=#{comment},
+        MODIFY_BY=#{modifyBy},
+        MODIFY_TIME=#{modifyTime}
+        where
+        USER_ID=#{userId}
+    </update>
+
+    <update id="updateOpenIdByUserId">
+        update sys_user set
+        OPEN_ID=#{openId}
+        where
+        USER_ID=#{userId}
+    </update>
+
+    <select id="getAllUserCount" resultType="int">
+        select count(*) from sys_user
+    </select>
+
+    <select id="getUserByPhone" resultType="com.dreams.sys.po.UserPo">
+        select <include refid="userAlias"></include>
+        from sys_user where phone=#{phone}
+    </select>
+
+    <select id="getUserByRoleId" resultType="com.dreams.sys.po.UserPo">
+        SELECT <include refid="userAlias"></include> FROM sys_user WHERE USER_ID IN(
+        SELECT USER_ID FROM user_role WHERE ROLE_ID = #{roleId})
+    </select>
+
+    <select id="getUnAssignedUserByRoleId" resultType="com.dreams.sys.po.UserPo">
+        SELECT <include refid="userAlias"></include> FROM sys_user WHERE USER_ID not IN(
+        SELECT USER_ID FROM user_role WHERE ROLE_ID = #{roleId})
+    </select>
+    <select id="getUserByOpenId" resultType="com.dreams.sys.po.UserPo">
+        select <include refid="userAlias"></include>
+        from sys_user where OPEN_ID=#{openId}
+    </select>
+    <select id="getUserByUsername" resultType="com.dreams.sys.po.UserPo">
+        select <include refid="userAlias"></include>
+        from sys_user where USER_ID = #{username}
+    </select>
+</mapper>

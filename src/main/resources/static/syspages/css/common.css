@@ -1,0 +1,37 @@
+body {
+  background-color: gainsboro;
+}
+body #app {
+  padding: 15px;
+  background: gainsboro;
+  width: 100%;
+}
+body #app header {
+  width: 100%;
+  line-height: 55px;
+  font-size: 14px;
+  background: #fff;
+}
+body #app header .layui-form-item {
+  margin: 0;
+  line-height: 55px;
+}
+body #app header .layui-form-item .layui-form-label {
+  width: 100px;
+}
+body #app section {
+  width: 100%;
+  margin-top: 10px;
+}
+body #app section .content-header {
+  line-height: 55px;
+  width: 100%;
+  background-color: #fff;
+  border-bottom: gainsboro solid 1px;
+  padding-left: 25px;
+}
+body #app section .content-body {
+  width: 100%;
+  background-color: #fff;
+  padding: 8px;
+}

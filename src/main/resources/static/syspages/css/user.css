@@ -1,0 +1,34 @@
+.addUserCard {
+  width: 530px;
+  height: 430px;
+  background-color: white;
+  padding: 25px;
+  margin: 0 auto;
+  display: none;
+}
+.addUserCard #userForm {
+  padding-bottom: 10px;
+}
+.addUserCard #userForm .layui-form-item .layui-form-label {
+  width: 120px;
+}
+.addUserCard #userForm .layui-form-item .layui-input-inline {
+  width: 280px;
+}
+.updateUserCard {
+  width: 530px;
+  height: 430px;
+  background-color: white;
+  padding: 25px;
+  margin: 0 auto;
+  display: none;
+}
+.updateUserCard #updateUserForm {
+  padding-bottom: 10px;
+}
+.updateUserCard #updateUserForm .layui-form-item .layui-form-label {
+  width: 120px;
+}
+.updateUserCard #updateUserForm .layui-form-item .layui-input-inline {
+  width: 280px;
+}

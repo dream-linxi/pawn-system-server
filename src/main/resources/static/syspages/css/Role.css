@@ -1,0 +1,59 @@
+.addRoleCard {
+  width: 480px;
+  height: 350px;
+  display: none;
+}
+.addRoleCard .layui-form {
+  padding: 15px;
+}
+.addRoleCard .layui-form .layui-form-item .layui-form-label {
+  width: 120px;
+}
+.addRoleCard .layui-form .layui-form-item .layui-input-inline textarea {
+  width: 320px;
+}
+.addRoleCard .layui-form .layui-form-item button {
+  margin-top: 10px;
+  margin-left: 10px;
+}
+.updateRoleCard {
+  width: 500px;
+  height: 350px;
+  display: none;
+}
+.updateRoleCard .layui-form {
+  padding: 15px;
+}
+.updateRoleCard .layui-form .layui-form-item .layui-form-label {
+  width: 120px;
+}
+.updateRoleCard .layui-form .layui-form-item .layui-input-inline textarea {
+  width: 320px;
+}
+.updateRoleCard .layui-form .layui-form-item button {
+  margin-top: 10px;
+  margin-left: 10px;
+}
+.assigneeUserCard {
+  width: 590px;
+  height: 510px;
+  display: none;
+  padding: 30px;
+}
+.assigneeUserCard #test4 {
+  padding-left: 20px;
+}
+.assigneeUserCard .layui-input-block {
+  float: right;
+}
+.assigneeUserCard .layui-input-block button {
+  margin-top: 25px;
+  margin-right: 60px;
+}
+.assigneeMenuCard {
+  height: auto;
+  width: 300px;
+  background-color: #fff;
+  padding: 20px;
+  display: none;
+}

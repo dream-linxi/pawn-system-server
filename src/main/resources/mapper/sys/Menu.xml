@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dreams.sys.dao.MenuDao">
+    <select id="getAllMenu" resultType="com.dreams.sys.po.MenuPo">
+        select
+         MENU_ID as "menuId",
+         MENU_NAME as "menuName",
+         P_MENU_ID as "pMenuId",
+         URL as "url",
+         DEFAULT_IMG as "defaultImg"
+        from sys_menu
+    </select>
+
+    <select id="getFmenu" resultType="com.dreams.sys.po.MenuPo">
+        select
+         MENU_ID as "menuId",
+         MENU_NAME as "menuName",
+         P_MENU_ID as "pMenuId",
+         URL as "url",
+         DEFAULT_IMG as "defaultImg"
+        from sys_menu
+        where P_MENU_ID=-1;
+    </select>
+    <select id="getMenuListByCurrentUser" resultType="com.dreams.sys.po.MenuPo">
+select  sm.MENU_ID as "menuId",
+         sm.MENU_NAME as "menuName",
+         sm.P_MENU_ID as "pMenuId",
+         sm.URL as "url",
+         sm.DEFAULT_IMG as "defaultImg" from role_menu rm LEFT JOIN user_role ur on rm.role_id = ur.role_id
+left join sys_menu sm on rm.menu_id = sm.menu_id
+where ur.USER_ID=#{userId}
+    </select>
+
+    <insert id="addMenu" parameterType="com.dreams.sys.po.MenuPo">
+        insert into sys_menu(MENU_ID,MENU_NAME,P_MENU_ID,URL,DEFAULT_IMG)
+         values (#{menuId},#{menuName},#{pMenuId},#{url},#{defaultImg});
+    </insert>
+    <insert id="addRoleOfMenu">
+        insert into role_menu(ROLE_ID,MENU_ID)
+        values (#{roleId},#{menuId})
+    </insert>
+
+    <update id="updMenu" parameterType="com.dreams.sys.po.MenuPo">
+        update sys_menu set MENU_NAME=#{menuName},URL=#{url},DEFAULT_IMG=#{defaultImg}
+        where MENU_ID = #{menuId}
+    </update>
+
+    <delete id="delMenu">
+        delete from sys_menu where MENU_ID = #{menuId}
+    </delete>
+
+    <delete id="deleteMenuByRoleId">
+        delete from role_menu where ROLE_ID=#{roleId}
+    </delete>
+</mapper>

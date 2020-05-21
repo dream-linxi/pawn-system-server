@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../layui/css/layui.css">
+    <link rel="stylesheet" href="./css/shop.css">
+    <script src="../../js/jquery-1.10.1.js"></script>
+    <title></title>
+</head>
+
+<body>
+<div id="app">
+    <!-- 搜索部分 -->
+    <header>
+        <form id="searchForm" class="layui-form">
+            <div class="layui-form-item">
+                <label class="layui-form-label">状态</label>
+                <div class="layui-input-inline">
+                    <select id="shopStat" name="shopStat">
+                        <option value="">全部</option>
+                        <option value="1">开业</option>
+                        <option value="0">停业</option>
+                    </select>
+                </div>
+                <label class="layui-form-label">关键字</label>
+                <div class="layui-input-inline">
+                    <input id="keyWord" type="text" name="keyWord" class="layui-input">
+                </div>
+                <button onclick="searchShopInfoByCondition()" type="button" class="layui-btn">搜索</button>
+            </div>
+        </form>
+    </header>
+
+    <!-- 数据显示部分 -->
+    <section>
+        <div class="content-body">
+            <table class="layui-hide" id="shopTable" lay-filter="shopTable"></table>
+        </div>
+    </section>
+</div>
+
+
+<!-- 表格工具栏 -->
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="showAddShopWin">新增</button>
+        <button class="layui-btn layui-btn-sm" lay-event="showUpdateShopWin">修改</button>
+        <button class="layui-btn layui-btn-sm" lay-event="deleteShopBy">删除</button>
+    </div>
+</script>
+
+<!-- 单选框(状态)切换 -->
+<script type="text/html" id="shopStatBar">
+    <!-- 这里的 checked 的状态只是演示 -->
+    <input type="checkbox" name="shopStat" value="{{d.shopCode}}" lay-skin="switch" lay-text="使用|停用"
+           lay-filter="shopStatDemo" {{
+           d.shopStat !="1" ? '':'checked' }}>
+</script>
+
+<!-- 新增门店信息面板 -->
+<div id="addShopInfoWin" class="layui-card">
+    <form id="addShopInfoForm" class="layui-form" action="">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">编号</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="shopCode" lay-verify="required|checkShopCode" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">门店名称</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="shopName" lay-verify="required" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">联系人</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="contact" lay-verify="required" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">电话</label>
+                <div class="layui-input-inline">
+                    <input type="tel" name="phoneNo" lay-verify="required|phone" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">地址</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="address" style="width: 350px;" lay-verify="required" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">状态</label>
+            <div class="layui-input-block">
+                <input type="radio" name="shopStat" value="1" title="启用" checked="">
+                <input type="radio" name="shopStat" value="0" title="停用">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <div id="test4" class="demo-transfer"></div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button onclick="addShopInfo()" type="button" class="layui-btn" lay-submit="" lay-filter="addShopInfoBtn">立即提交</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- 修改门店信息面板 -->
+<div id="updateShopInfoWin" class="layui-card">
+    <form id="updateShopInfoForm" class="layui-form" lay-filter="updateShopInfoFilter"  action="">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">编号</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="shopCode" lay-verify="required" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">门店名称</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="shopName" lay-verify="required" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">联系人</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="contact" lay-verify="required" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">电话</label>
+                <div class="layui-input-inline">
+                    <input type="tel" name="phoneNo" lay-verify="required|phone" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">地址</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="address" style="width: 350px;" lay-verify="required" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">性别</label>
+            <div class="layui-input-block">
+                <input type="radio" name="shopStat" value="1" title="启用" checked="">
+                <input type="radio" name="shopStat" value="0" title="停用">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <div id="test5" class="demo-transfer"></div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button onclick="updateShopInfo()" type="button" class="layui-btn" lay-submit="" lay-filter="updateShopInfoBtn">立即提交</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- layui js -->
+<script src="https://cdn.bootcdn.net/ajax/libs/less.js/3.11.1/less.js"></script>
+<script src="../../layui/layui.all.js"></script>
+<script src="./js/shop.js"></script>
+</body>
+</html>
