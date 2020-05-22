@@ -115,4 +115,33 @@
             </if>
         </where>
     </select>
+
+    <!-- 获取所有三级分类信息 -->
+    <select id="getAllSubCategoryInfo"
+            resultType="com.dreams.product.po.ProductCatPo"
+            parameterType="com.dreams.product.bo.ProductCatBo">
+        select
+            CAT_CODE as "catCode",
+            CAT_NAME as "catName",
+            P_CAT_CODE as "pCatCode",
+            CAT_LVL as "catLvl",
+            CAT_ROUTE as "catRoute",
+            UNIT as "unit",
+            CAT_DESC as "catDesc",
+            EVAL_PIC_DEF as "evalPicDef",
+            IS_SHOW as "isShow",
+            SORT_NO as "sortNo"
+        from
+            c_pawn_product_cat
+        <where>
+            CAT_LVL = 3
+            <if test="keyWord != null and keyWord != ''">
+                and (
+                CAT_CODE like '%${keyWord}%'
+                or CAT_NAME like '%${keyWord}%'
+                or CAT_DESC like '%${keyWord}%'
+                )
+            </if>
+        </where>
+    </select>
 </mapper>

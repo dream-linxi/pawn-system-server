@@ -235,7 +235,6 @@ function showUpdateSmallCategoryInfoWin(data) {
     });
 }
 
-
 /**
  * 更新二级分类信息
  */

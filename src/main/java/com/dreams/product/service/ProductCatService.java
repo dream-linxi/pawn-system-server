@@ -175,4 +175,31 @@ public class ProductCatService
         result.put("row",row);
         return result;
     }
+
+
+    /**
+     * 获取所有三级分类信息
+     * @param productCatBo 商品分类实体类
+     * @return Map 集合,封装了对应的数据
+     *   - msg: 消息
+     *   - data: 对应数据
+     *   - code: 响应码
+     *   - count: 总记录数
+     */
+    public Map<String, Object> getAllSubCategoryInfo(ProductCatBo productCatBo)
+    {
+        Map<String, Object> result = new HashMap<String, Object>();
+
+        PageHelper.startPage(productCatBo.getPage(), productCatBo.getLimit());
+        List<ProductCatPo> productCatPos = this.productCatDao.getAllSubCategoryInfo(productCatBo);
+        PageInfo<ProductCatPo> productCatPoPageInfo = new PageInfo<ProductCatPo>(productCatPos);
+
+        // 响应数据
+        result.put("msg","");
+        result.put("data",productCatPos);
+        result.put("code",0);
+        result.put("count",productCatPoPageInfo.getTotal());
+
+        return result;
+    }
 }

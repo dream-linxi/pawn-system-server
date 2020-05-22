@@ -30,4 +30,6 @@ public interface ProductCatDao
     void deleteSmallCategoryInfoByPCatCodes(String[] pCatCodes);
 
     Integer deleteSmallCategoryInfoByCatCodes(String[] catCodes);
+
+    List<ProductCatPo> getAllSubCategoryInfo(ProductCatBo productCatBo);
 }

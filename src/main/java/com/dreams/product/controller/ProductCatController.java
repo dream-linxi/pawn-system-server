@@ -108,4 +108,15 @@ public class ProductCatController
     {
         return this.productCatService.deleteSmallCategoryInfo(catCodes);
     }
+
+    /**
+     * 获取所有三级分类信息
+     * @param productCatBo 商品分类实体类
+     * @return Map 集合,封装了对应的数据
+     */
+    @RequestMapping("/getAllSubCategoryInfo.json")
+    public Map<String,Object> getAllSubCategoryInfo(ProductCatBo productCatBo)
+    {
+        return this.productCatService.getAllSubCategoryInfo(productCatBo);
+    }
 }
