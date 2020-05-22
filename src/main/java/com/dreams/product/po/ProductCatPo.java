@@ -1,5 +1,6 @@
 package com.dreams.product.po;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,6 +23,7 @@ public class ProductCatPo
     /* 分类名称 */
     private String catName;
     /* 上级分类 */
+    @JsonProperty("pCatCode")
     private String pCatCode;
     /* 分类级次 */
     private Integer catLvl;

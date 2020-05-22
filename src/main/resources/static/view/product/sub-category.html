@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../../layui/css/layui.css">
+    <link rel="stylesheet" href="./css/small-category.css">
+    <script src="../../js/jquery-1.10.1.js"></script>
+</head>
+<body>
+<div id="app">
+    <!-- 搜索部分 -->
+    <header>
+        <form id="searchForm" class="layui-form">
+            <div class="layui-form-item">
+                <label class="layui-form-label">关键字</label>
+                <div class="layui-input-inline">
+                    <input id="keyWord" type="text" name="keyWord" class="layui-input">
+                </div>
+                <button onclick="searchSubCategoryInfoByCondition()" type="button" class="layui-btn">搜索</button>
+            </div>
+        </form>
+    </header>
+    <!-- 数据显示部分 -->
+    <section>
+        <div class="content-body">
+            <table class="layui-hide" id="subCategoryTable" lay-filter="subCategoryTableFilter"></table>
+        </div>
+    </section>
+</div>
+</body>
+</html>

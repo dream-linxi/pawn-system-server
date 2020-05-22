@@ -139,4 +139,40 @@ public class ProductCatService
 
         return result;
     }
+
+    /**
+     * 更新二级分类信息
+     * @param productCatPo 商品分类实体类
+     * @return Map 集合,封装了对应的数据
+     *  - row: 受影响行数
+     */
+    public Map<String, Object> updateSmallCategoryInfo(ProductCatPo productCatPo)
+    {
+        Map<String, Object> result = new HashMap<>();
+
+        Integer row = this.productCatDao.updateSmallCategoryInfo(productCatPo);
+
+        result.put("row",row);
+        return result;
+    }
+
+    /**
+     * 根据分类编号删除二级分类及其子类信息
+     * @param catCodes 分类编号数组
+     * @return Map 集合,封装了对应的数据
+     *  - row: 受影响行数
+     */
+    public Map<String, Object> deleteSmallCategoryInfo(String[] catCodes)
+    {
+
+        Map<String, Object> result = new HashMap<>();
+
+        this.productCatDao.deleteSmallCategoryInfoByPCatCodes(catCodes);
+
+        Integer row = this.productCatDao.deleteSmallCategoryInfoByCatCodes(catCodes);
+
+
+        result.put("row",row);
+        return result;
+    }
 }

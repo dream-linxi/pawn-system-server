@@ -18,10 +18,39 @@
         set
             CAT_NAME=#{catName},
             CAT_DESC=#{catDesc},
-            EVAL_PIC_DEF=#{evalPicDef},
+            SORT_NO=#{sortNo},
+            P_CAT_CODE#{pCatCode},
+            UNIT=#{unit},
+            IS_SHOW=#{isShow}
+        where  CAT_CODE=#{catCode}
+    </update>
+
+    <!-- 更新二级分类信息 -->
+    <update id="updateSmallCategoryInfo">
+        update
+            c_pawn_product_cat
+        set
+            CAT_NAME=#{catName},
+            CAT_DESC=#{catDesc},
             SORT_NO=#{sortNo}
         where  CAT_CODE=#{catCode}
     </update>
+
+    <!-- 根据父类编号删除数据 -->
+    <delete id="deleteSmallCategoryInfoByPCatCodes">
+        delete from c_pawn_product_cat where P_CAT_CODE in
+        <foreach collection="array" open="(" close=")" separator="," item="pCatCode">
+            #{pCatCode}
+        </foreach>
+    </delete>
+
+    <delete id="deleteSmallCategoryInfoByCatCodes">
+        delete from c_pawn_product_cat where CAT_CODE in
+        <foreach collection="array" open="(" close=")" separator="," item="catCode">
+            #{catCode}
+        </foreach>
+    </delete>
+
 
     <!-- 查询所有商品大类信息 -->
     <select id="getAllBigCategoryInfo" resultType="com.dreams.product.po.ProductCatPo">

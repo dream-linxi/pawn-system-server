@@ -43,7 +43,7 @@
         <div class="layui-btn-container">
             <button class="layui-btn layui-btn-sm" lay-event="showAddSmallCategoryInfoWin">新增</button>
             <button class="layui-btn layui-btn-sm" lay-event="showUpdateSmallCategoryInfoWin">修改</button>
-            <button class="layui-btn layui-btn-sm" lay-event="deleteSmallCategoryInfoWin">删除</button>
+            <button class="layui-btn layui-btn-sm" lay-event="deleteSmallCategoryInfo">删除</button>
         </div>
     </script>
 
@@ -131,6 +131,88 @@
         </div>
     </form>
 </div>
+
+<!-- 修改二级类商品窗口 -->
+<div id="updateSmallCategoryInfoWin"
+     style="width: 600px;height: 500px;padding: 15px 25px;display: none;">
+    <form id="updateSmallCategoryInfoForm" lay-filter="updateSmallCategoryInfoFilter" class="layui-form">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">分类编号</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="catCode" lay-verify="required|checkCatCode" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">分类名称</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="catName" lay-verify="required" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">上级分类</label>
+                <div class="layui-input-inline">
+                    <select id="updatePCatCode" name="pCatCode">
+                        <option value="">全部</option>
+                        <option value="1">开业</option>
+                        <option value="0">停业</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">数量单位</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="unit" lay-verify="required" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">排序</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="sortNo" lay-verify="required" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">分类描述</label>
+            <div class="layui-input-block">
+                <textarea name="catDesc" placeholder="请输入内容" class="layui-textarea"></textarea>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">是否显示</label>
+            <div class="layui-input-block">
+                <input type="radio" name="isShow" value="是" title="是" checked="">
+                <input type="radio" name="isShow" value="否" title="否">
+            </div>
+        </div>
+        <input type="hidden" value="2" name="catLvl">
+        <div class="layui-form-item" style="padding-top: 15px;">
+            <div class="layui-input-block">
+                <button onclick="updateSmallCategoryInfo()" type="button" class="layui-btn" lay-submit=""
+                        lay-filter="updateSmallCategoryBtn">立即提交
+                </button>
+                <button type="button" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+</div>
+
 
     <script src="https://cdn.bootcdn.net/ajax/libs/less.js/3.11.1/less.js"></script>
     <script src="../../layui/layui.all.js"></script>

@@ -47,8 +47,6 @@ function loadBrandInfoTable() {
                     }
                     break;
                 case 'deleteBrandInfo':
-
-
                     if (data.length === 0) {
                         layer.msg('请选择一行');
                     } else {

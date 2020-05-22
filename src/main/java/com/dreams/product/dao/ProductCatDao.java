@@ -24,4 +24,10 @@ public interface ProductCatDao
     Integer updateBigCateGoryProductCat(ProductCatPo productCatPo);
 
     List<ProductCatPo> getAllSmallCategoryInfo(ProductCatBo productCatBo);
+
+    Integer updateSmallCategoryInfo(ProductCatPo productCatPo);
+
+    void deleteSmallCategoryInfoByPCatCodes(String[] pCatCodes);
+
+    Integer deleteSmallCategoryInfoByCatCodes(String[] catCodes);
 }

@@ -86,4 +86,26 @@ public class ProductCatController
     {
         return this.productCatService.getAllSmallCategoryInfo(productCatBo);
     }
+
+    /**
+     * 更新二级分类信息
+     * @param productCatPo 商品分类实体类
+     * @return Map 集合,封装了对应的数据
+     */
+    @RequestMapping("/updateSmallCategoryInfo.json")
+    public  Map<String,Object> updateSmallCategoryInfo(ProductCatPo productCatPo)
+    {
+        return this.productCatService.updateSmallCategoryInfo(productCatPo);
+    }
+
+    /**
+     * 根据分类编号删除二级分类及其子类信息
+     * @param catCodes 分类编号数组
+     * @return Map 集合,封装了对应的数据
+     */
+    @RequestMapping("/deleteSmallCategoryInfo.json")
+    public  Map<String,Object> deleteSmallCategoryInfo(@RequestParam("catCodes[]") String [] catCodes)
+    {
+        return this.productCatService.deleteSmallCategoryInfo(catCodes);
+    }
 }

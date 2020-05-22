@@ -6,9 +6,8 @@ $(function () {
 /**
  * 动态加载下拉列表
  */
-function loadSmallCateGoryInfo()
-{
-    layui.use(['form'],function () {
+function loadSmallCateGoryInfo() {
+    layui.use(['form'], function () {
         let form = layui.form;
 
         getAllBigCategoryInfoByNoPage($('#bigCatCode'));
@@ -19,8 +18,7 @@ function loadSmallCateGoryInfo()
 }
 
 // 加载二级分类数据
-function loadSmallCategrayTable()
-{
+function loadSmallCategrayTable() {
     layui.use(['table', 'layer'], function () {
         let table = layui.table         // 表格
             , layer = layui.layer;      // 弹出层
@@ -33,7 +31,7 @@ function loadSmallCategrayTable()
             , page: true    // 开启分页
             , toolbar: '#smallCategoryToolBar'    // 工具栏
             , cols: [[  // 表头
-                  {type: 'checkbox', fixed: 'left'}
+                {type: 'checkbox', fixed: 'left'}
                 , {field: 'catCode', title: '编号', width: "10%", sort: true}
                 , {field: 'catName', title: '分类名称', width: "18%", sort: true}
                 , {field: 'pCatCode', title: '所属大类', width: "18%", sort: true}
@@ -41,7 +39,7 @@ function loadSmallCategrayTable()
                 , {field: 'unit', title: '单位', width: "10%", sort: true}
                 , {field: 'sortNo', title: '排序', width: "10%", sort: true}
                 , {field: 'isShow', title: '显示', width: "10%", sort: true}
-                , {fixed: 'right', width: '10%', align:'center',title:"操作" , toolbar: '#barDemo'}
+                , {fixed: 'right', width: '10%', align: 'center', title: "操作", toolbar: '#barDemo'}
             ]]
         });
 
@@ -61,11 +59,20 @@ function loadSmallCategrayTable()
                         layer.msg('只能同时编辑一个');
                     } else {
                         // layer.alert('编辑 [id]：' + checkStatus.data[0].shopCode);
-                        // showUpdateSmallCategoryInfoWin(checkStatus.data[0]);
+                        showUpdateSmallCategoryInfoWin(checkStatus.data[0]);
                     }
                     break;
-                case 'update':
+                case 'deleteSmallCategoryInfo':
                     layer.msg('编辑');
+                    if (data.length === 0) {
+                        layer.msg('请选择一行');
+                    } else {
+                        let catCodes = [];
+                        for (let cat of data) {
+                            catCodes.push(cat.catCode);
+                        }
+                        deleteSmallCategoryInfo(catCodes);
+                    }
                     break;
             }
             ;
@@ -73,12 +80,12 @@ function loadSmallCategrayTable()
 
 
         //监听行工具事件
-        table.on('tool(smallCategoryTableFilter)', function(obj){ //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+        table.on('tool(smallCategoryTableFilter)', function (obj) { //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
             let data = obj.data //获得当前行数据
-                ,layEvent = obj.event; //获得 lay-event 对应的值
-            if(layEvent === 'detail'){
-                layer.msg('查看操作');
-                console.log(data);
+                , layEvent = obj.event; //获得 lay-event 对应的值
+            if (layEvent === 'detail') {
+                location.href="./sub-category.html?catCode=" + data.catCode +"&catName=" + data.catName;
+                //console.log(data);
             }
         });
 
@@ -88,8 +95,7 @@ function loadSmallCategrayTable()
 /**
  * 根据条件查询对应的二级类商品信息
  */
-function searchSmallCategoryInfoByCondition()
-{
+function searchSmallCategoryInfoByCondition() {
     layui.use(['table'], function () {
         let table = layui.table;
 
@@ -109,10 +115,10 @@ function searchSmallCategoryInfoByCondition()
  * 显示二级分类新增窗口
  */
 let addSmallCategoryLayer;
-function showAddSmallCategoryInfoWin() 
-{
 
-    layui.use(['layer','form'], function () {
+function showAddSmallCategoryInfoWin() {
+
+    layui.use(['layer', 'form'], function () {
         let layer = layui.layer
             , form = layui.form;
 
@@ -138,8 +144,10 @@ function showAddSmallCategoryInfoWin()
     });
 }
 
-function addSmallCategoryInfo()
-{
+/**
+ * 新增二级分类
+ */
+function addSmallCategoryInfo() {
     layui.use(['form', 'layer', 'table'], function () {
         let form = layui.form
             , layer = layui.layer
@@ -192,13 +200,111 @@ function addSmallCategoryInfo()
     });
 }
 
+/**
+ * 修改二级分类信息
+ * @param data
+ */
+let updateSmallCategoryLayer;
+
+function showUpdateSmallCategoryInfoWin(data) {
+    layui.use(['form', 'layer'], function () {
+        let form = layui.form
+            , layer = layui.layer;
+
+        getAllBigCategoryInfoByNoPage($('#updatePCatCode'));
+
+        form.render('select');//需要渲染一下
+
+        form.val('updateSmallCategoryInfoFilter', data);
+
+        updateSmallCategoryLayer = layer.open({
+            type: 1     // 基本层类型
+            , title: '新增大类信息'   // 标题
+            , content: $('#updateSmallCategoryInfoWin')  // 内容
+            , area: ['auto', 'auto']     // 宽高
+            , closeBtn: 1   // 关闭按钮
+            , shade: 0.3    // 遮罩
+            , id: 'LAY_layuipro'    // 唯一 Id 标识
+            , resize: true     // 不允许拉伸
+            , moveOut: false     // 允许拖至屏外
+            , moveType: 1
+            , cancel: function () { // 右上关闭操作
+            }
+        });
+
+    });
+}
+
+
+/**
+ * 更新二级分类信息
+ */
+function updateSmallCategoryInfo() {
+    layui.use(['form', 'table', 'layer'], function () {
+
+        let form = layui.form
+            , table = layui.table
+            , layer = layui.layer;
+
+
+        form.on('submit(updateSmallCategoryBtn)', function (data) {
+            // 发生 ajax 请求向后台提交数据
+            $.post('../../product/productcat/updateSmallCategoryInfo.json', data.field, function (result) {
+                if (result.row > 0) {
+                    // 关闭窗口
+                    layer.close(updateSmallCategoryLayer);
+                    updateSmallCategoryLayer = "";
+                    // 情况表单
+                    $("#updateSmallCategoryInfoForm")[0].reset();
+                    // 重新加载 table
+                    table.reload('smallCategoryTable', {
+                        page: {
+                            curr: 1 //重新从第 1 页开始
+                        }
+                    });
+                    // 弹出提示信息
+                    layer.alert("分类信息更新成功!!!")
+                }
+            }, 'json');
+
+            return false;
+        });
+    });
+}
+
+/**
+ * 根据编号删除二级分类信息
+ * @param catCodes
+ */
+function deleteSmallCategoryInfo(catCodes) {
+    layui.use(['form', 'table', 'layer'], function () {
+
+        let form = layui.form
+            , table = layui.table
+            , layer = layui.layer;
+
+
+        $.post('../../product/productcat/deleteSmallCategoryInfo.json', {"catCodes": catCodes} , function (result) {
+            if (result.row > 0) {
+                // 重新加载 table
+                table.reload('smallCategoryTable', {
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                });
+                // 弹出提示信息
+                layer.alert("分类删除成功!!!")
+            }
+        }, 'json');
+
+    });
+}
 
 /**
  * 获取所有一级分类
  * @param element
  */
-function getAllBigCategoryInfoByNoPage(element)
-{
+function getAllBigCategoryInfoByNoPage(element) {
     $.ajax({
         url: "../../product/productcat/getAllBigCategoryInfoByNoPage.json",
         type: 'get',
@@ -209,7 +315,7 @@ function getAllBigCategoryInfoByNoPage(element)
             // 遍历所有仓库信息
             let htmlStr = "<option value=\"\">全部</option>";
             for (let row of result) {
-                htmlStr += "<option value='"+ row.catCode +"'>"+ row.catName +"</option>";
+                htmlStr += "<option value='" + row.catCode + "'>" + row.catName + "</option>";
             }
             element.html(htmlStr);
         }
