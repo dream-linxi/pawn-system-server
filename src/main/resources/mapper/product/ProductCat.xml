@@ -44,6 +44,7 @@
         </foreach>
     </delete>
 
+    <!-- 删除二级分类信息 -->
     <delete id="deleteSmallCategoryInfoByCatCodes">
         delete from c_pawn_product_cat where CAT_CODE in
         <foreach collection="array" open="(" close=")" separator="," item="catCode">
@@ -143,5 +144,9 @@
                 )
             </if>
         </where>
+    </select>
+
+    <select id="getAllSubCategoryInfoByNoPage" resultType="com.dreams.product.po.ProductCatPo">
+
     </select>
 </mapper>

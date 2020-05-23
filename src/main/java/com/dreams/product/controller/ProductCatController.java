@@ -72,7 +72,6 @@ public class ProductCatController
     @RequestMapping("/updateBigCateGoryProductCat.json")
     public Map<String,Object> updateBigCateGoryProductCat(ProductCatPo productCatPo)
     {
-
         return this.productCatService.updateBigCateGoryProductCat(productCatPo);
     }
 
@@ -118,5 +117,26 @@ public class ProductCatController
     public Map<String,Object> getAllSubCategoryInfo(ProductCatBo productCatBo)
     {
         return this.productCatService.getAllSubCategoryInfo(productCatBo);
+    }
+
+    /**
+     * 获取所有二级分类,不分页
+     * @return Map 集合,封装了对应的数据
+     */
+    @RequestMapping("/getAllSubCategoryInfoByNoPage.json")
+    public Map<String, Object> getAllSubCategoryInfoByNoPage()
+    {
+        return this.productCatService.getAllSubCategoryInfoByNoPage();
+    }
+
+    /**
+     * 根据分类编号删除三级分类
+     * @param catCodes 分类编号数组
+     * @return Map 集合,封装了对应的数据
+     */
+    @RequestMapping("/deleteSubCategoryInfo.json")
+    public Map<String, Object> deleteSubCategoryInfo(@RequestParam("catCodes[]") String [] catCodes)
+    {
+        return this.productCatService.deleteSubCategoryInfo(catCodes);
     }
 }

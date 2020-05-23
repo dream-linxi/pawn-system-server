@@ -32,4 +32,5 @@ public interface ProductCatDao
     Integer deleteSmallCategoryInfoByCatCodes(String[] catCodes);
 
     List<ProductCatPo> getAllSubCategoryInfo(ProductCatBo productCatBo);
+
 }

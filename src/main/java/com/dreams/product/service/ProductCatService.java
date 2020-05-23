@@ -202,4 +202,36 @@ public class ProductCatService
 
         return result;
     }
+
+    /**
+     * 获取所有二级分类,不分页
+     * @return Map 集合,封装了对应的数据
+     */
+    public Map<String, Object> getAllSubCategoryInfoByNoPage()
+    {
+        Map<String, Object> result = new HashMap<>();
+
+        ProductCatBo productCatBo = new ProductCatBo();
+        List<ProductCatPo> productCatPos = this.productCatDao.getAllSmallCategoryInfo(productCatBo);
+
+        // 响应数据
+        result.put("result",productCatPos);
+
+        return result;
+    }
+
+    /**
+     * 根据分类编号删除三分类
+     * @param catCodes 分类编号数组
+     * @return Map 集合,封装了对应的数据
+     *  - row: 受影响行数
+     */
+    public Map<String, Object> deleteSubCategoryInfo(String[] catCodes) {
+        Map<String, Object> result = new HashMap<>();
+
+        Integer row = this.productCatDao.deleteSmallCategoryInfoByCatCodes(catCodes);
+
+        result.put("row",row);
+        return result;
+    }
 }

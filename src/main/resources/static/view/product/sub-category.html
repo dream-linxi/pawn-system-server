@@ -28,6 +28,171 @@
         </div>
     </section>
 
+    <!-- 表格工具栏部分 -->
+    <script type="text/html" id="subCategoryToolBar">
+        <div class="layui-btn-container">
+            <button class="layui-btn layui-btn-sm" lay-event="showAddSubCategoryInfoWin">新增</button>
+            <button class="layui-btn layui-btn-sm" lay-event="showUpdateSubCategoryInfoWin">修改</button>
+            <button class="layui-btn layui-btn-sm" lay-event="deleteSubCategoryInfo">删除</button>
+            <button class="layui-btn layui-btn-sm" lay-event="returnSmallCategory">返回上级</button>
+        </div>
+    </script>
+
+    <!-- 新增三级类商品窗口 -->
+    <div id="addSubCategoryInfoWin"
+         style="width: 600px;height: 500px;padding: 15px 25px;display: none;">
+        <form id="addSubCategoryInfoForm" class="layui-form">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">分类编号</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="catCode" lay-verify="required|checkCatCode" autocomplete="off"
+                               class="layui-input">
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">分类名称</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="catName" lay-verify="required" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">上级分类</label>
+                    <div class="layui-input-inline">
+                        <input id="smallCatName" type="text" name="smallCatName" readonly autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">数量单位</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="unit" lay-verify="required" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">排序</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="sortNo" lay-verify="required" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">分类描述</label>
+                <div class="layui-input-block">
+                    <textarea name="catDesc" placeholder="请输入内容" class="layui-textarea"></textarea>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">是否显示</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="isShow" value="是" title="是" checked="">
+                    <input type="radio" name="isShow" value="否" title="否">
+                </div>
+            </div>
+            <input type="hidden" value="3" name="catLvl">
+            <input id="pCatCode" type="hidden" value="" name="pCatCode">
+            <div class="layui-form-item" style="padding-top: 15px;">
+                <div class="layui-input-block">
+                    <button onclick="addSubCategoryInfo()" type="button" class="layui-btn" lay-submit=""
+                            lay-filter="addSubCategoryBtn">立即提交
+                    </button>
+                    <button type="button" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- 修改三级类商品窗口 -->
+    <div id="updateSubCategoryInfoWin"
+         style="width: 600px;height: 500px;padding: 15px 25px;display: none;">
+        <form id="updateSubCategoryInfoForm" lay-filter="updateSubCategoryInfoFilter" class="layui-form">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">分类编号</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="catCode" lay-verify="required|checkCatCode" autocomplete="off"
+                               class="layui-input">
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">分类名称</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="catName" lay-verify="required" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">上级分类</label>
+                    <div class="layui-input-inline">
+                        <input id="updateSmallCatName" type="text" name="smallCatName" readonly autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">数量单位</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="unit" lay-verify="required" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">排序</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="sortNo" lay-verify="required" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">分类描述</label>
+                <div class="layui-input-block">
+                    <textarea name="catDesc" placeholder="请输入内容" class="layui-textarea"></textarea>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">是否显示</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="isShow" value="是" title="是" checked="">
+                    <input type="radio" name="isShow" value="否" title="否">
+                </div>
+            </div>
+            <input type="hidden" value="3" name="catLvl">
+            <input id="updatePCatCode" type="hidden" value="" name="pCatCode">
+            <div class="layui-form-item" style="padding-top: 15px;">
+                <div class="layui-input-block">
+                    <button onclick="updateSubCategoryInfo()" type="button" class="layui-btn" lay-submit=""
+                            lay-filter="updateSubCategoryBtn">立即提交
+                    </button>
+                    <button type="button" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
 
     <script src="https://cdn.bootcdn.net/ajax/libs/less.js/3.11.1/less.js"></script>
     <script src="../../layui/layui.all.js"></script>
