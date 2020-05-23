@@ -3,8 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="../../layui/css/layui.css">
+    <link rel="stylesheet" href="./css/channel.css">
+    <script src="../../js/jquery-1.10.1.js"></script>
 </head>
 <body>
-123
+<div id="app">
+    <!-- 搜索部分 -->
+    <header>
+        <form id="searchForm" class="layui-form">
+            <div class="layui-form-item">
+                <label class="layui-form-label">关键字</label>
+                <div class="layui-input-inline">
+                    <input id="keyWord" type="text" name="keyWord" class="layui-input">
+                </div>
+                <button onclick="searchChannelInfoByCondition()" type="button" class="layui-btn">搜索</button>
+            </div>
+        </form>
+    </header>
+    <!-- 数据显示部分 -->
+    <section>
+        <div class="content-body">
+                <table class="layui-hide" id="channelTable" lay-filter="channelTableFilter"></table>
+        </div>
+    </section>
+</div>
+
+    <script src="https://cdn.bootcdn.net/ajax/libs/less.js/3.11.1/less.js"></script>
+    <script src="../../layui/layui.all.js"></script>
+    <script src="./js/channel.js"></script>
 </body>
 </html>
