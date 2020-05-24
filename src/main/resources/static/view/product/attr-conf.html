@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../../layui/css/layui.css">
+    <link rel="stylesheet" href="./css/small-category.css">
+    <script src="../../js/jquery-1.10.1.js"></script>
+</head>
+<body>
+<div id="app">
+    <!-- 搜索部分 -->
+    <header>
+        <form id="searchForm" class="layui-form">
+            <div class="layui-form-item">
+                <label class="layui-form-label">关键字</label>
+                <div class="layui-input-inline">
+                    <input id="keyWord" type="text" name="keyWord" class="layui-input">
+                </div>
+                <button onclick="searchSmallCategoryInfoByCondition()" type="button" class="layui-btn">搜索</button>
+            </div>
+        </form>
+    </header>
+    <!-- 数据显示部分 -->
+    <section>
+        <div class="content-body">
+            <table class="layui-hide" id="smallCategoryTable" lay-filter="smallCategoryTableFilter"></table>
+        </div>
+    </section>
+</div>
+
+<!-- 表格工具栏部分 -->
+<script type="text/html" id="smallCategoryToolBar">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="showAddSmallCategoryInfoWin">新增</button>
+        <button class="layui-btn layui-btn-sm" lay-event="showUpdateSmallCategoryInfoWin">修改</button>
+        <button class="layui-btn layui-btn-sm" lay-event="deleteSmallCategoryInfo">删除</button>
+    </div>
+</script>
+
+<script src="https://cdn.bootcdn.net/ajax/libs/less.js/3.11.1/less.js"></script>
+<script src="../../layui/layui.all.js"></script>
+<script src="./js/small-category.js"></script>
+</body>
+</html>

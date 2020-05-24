@@ -4,4 +4,93 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dreams.product.dao.AttrGroupDao">
 
+    <!--  插入属性分组信息 -->
+    <insert id="addAttrGroupInfo">
+        insert into c_pawn_attr_group(GROUP_CODE,GROUP_NAME,GROUP_STAT,SORT_NO)
+        values (#{groupCode},#{groupName},#{groupStat},#{sortNo})
+    </insert>
+
+    <!-- 新增分类属性组中间表信息 -->
+    <insert id="addAttrGroupCatRel">
+        insert into c_pawn_attr_group_cat_rel(GROUP_CODE,CAT_CODE)
+        values (#{groupCode},#{catCode})
+    </insert>
+
+    <!-- 更新属性组信息 -->
+    <update id="updateAttrGroupInfo" parameterType="com.dreams.product.po.AttrGroupPo">
+        update
+            c_pawn_attr_group
+        set
+            GROUP_NAME=#{groupName},
+            GROUP_STAT=#{groupStat},
+            SORT_NO=#{sortNo}
+        where
+            GROUP_CODE=#{groupCode}
+    </update>
+
+    <!-- 删除属性组和大类中间表信息 -->
+    <delete id="deleteAttrGroupCatRelByGroupCode">
+        delete from c_pawn_attr_group_cat_rel where GROUP_CODE=#{groupCode}
+    </delete>
+
+    <!-- 删除属性组和大类中间表信息 -->
+    <delete id="deleteAttrGroupCatRelByGroupCodes">
+        delete from c_pawn_attr_group_cat_rel where GROUP_CODE in
+        <foreach collection="array" open="(" close=")" separator="," item="groupCode">
+            #{groupCode}
+        </foreach>
+    </delete>
+
+    <!-- 删除属性组关联的属性信息 -->
+    <delete id="deleteAttrConfigInfoByGroupCodes">
+        delete from c_pawn_attr_conf where GROUP_CODE in
+        <foreach collection="array" open="(" close=")" separator="," item="groupCode">
+            #{groupCode}
+        </foreach>
+    </delete>
+
+    <!-- 删除属性组信息 -->
+    <delete id="deleteAttrGroupInfoByGroupCodes">
+        delete from c_pawn_attr_group where GROUP_CODE in
+        <foreach collection="array" open="(" close=")" separator="," item="groupCode">
+            #{groupCode}
+        </foreach>
+    </delete>
+
+
+
+
+    <!-- 获取所有属性分组信息 -->
+    <select id="getAllAttrGroupInfo"
+            resultType="com.dreams.product.po.AttrGroupPo"
+            parameterType="com.dreams.product.bo.AttrGroupBo">
+        select
+            cpag.GROUP_CODE,
+            cpag.GROUP_NAME,
+            cpag.GROUP_STAT,
+            cpag.SORT_NO,
+	        (select count(*) from c_pawn_attr_conf cpac where cpac.GROUP_CODE = cpag.GROUP_CODE) as "countAttr",
+	        (select GROUP_CONCAT(cppc.CAT_NAME) from c_pawn_product_cat cppc where cppc.CAT_CODE in
+		        (select cpagcr.CAT_CODE from c_pawn_attr_group_cat_rel cpagcr where cpag.GROUP_CODE = cpagcr.GROUP_CODE)) as "bigCatName"
+        from
+            c_pawn_attr_group cpag
+        <where>
+            <if test="keyWord != null and keyWord != ''">
+                and (
+                cpag.GROUP_CODE like '%${keyWord}%'
+                or cpag.GROUP_NAME like '%${keyWord}%'
+                or cpag.GROUP_STAT like '%${keyWord}%'
+                )
+            </if>
+        </where>
+    </select>
+
+    <!-- 统计行数 -->
+    <select id="checkGroupCode" resultType="java.lang.Integer">
+        select count(*) from c_pawn_attr_group where GROUP_CODE=#{groupCode}
+    </select>
+
+    <select id="getAllCatCodeByGroupCode" resultType="java.lang.String">
+        select CAT_CODE from c_pawn_attr_group_cat_rel where GROUP_CODE=#{groupCode}
+    </select>
 </mapper>
