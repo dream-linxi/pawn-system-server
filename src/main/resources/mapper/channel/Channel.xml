@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dreams.channel.dao.ChannelDao">
+
+    <!-- 添加渠道商信息 -->
+    <insert id="addChannelInfo" parameterType="com.dreams.channel.po.ChannelPo">
+        insert into
+            i_pawn_channel(CHANNEL_CODE,CHANNEL_NAME,MOBILE,ID_NO,ACCOUNT_NAME,BANK_NAME,ACCOUNT,MEMBER_COUNT,TOTAL_CHARGE,CONSUME,CHANNEL_STAT,CREATE_BY,CREATE_TIME)
+        values
+        (#{channelCode},#{channelName},#{mobile},#{idNo},#{accountName},#{bankName},#{account},#{memberCount},#{totalCharge},#{consume},#{channelStat},#{createBy},#{createTime});
+    </insert>
+
+    <!-- 更新渠道信息 -->
+    <update id="updateChannelInfo">
+        update
+            i_pawn_channel
+        set
+            CHANNEL_NAME=#{channelName},
+            MOBILE=#{mobile},
+            ID_NO=#{idNo},
+            ACCOUNT_NAME=#{accountName},
+            BANK_NAME=#{bankName},
+            ACCOUNT=#{account},
+            MEMBER_COUNT=#{memberCount},
+            TOTAL_CHARGE=#{totalCharge},
+            CONSUME=#{consume},
+            CHANNEL_STAT=#{channelStat},
+            MODIFY_BY=#{modifyBy},
+            MODIFY_TIME=#{modifyTime}
+        where
+            CHANNEL_CODE=#{channelCode}
+    </update>
+
+    <!-- 根据编号删除对应渠道信息 -->
+    <delete id="deleteChannelInfoByChannelCodes">
+        delete from i_pawn_channel where CHANNEL_CODE in
+        <foreach collection="array" open="(" close=")" separator="," item="channelCode">
+            #{channelCode}
+        </foreach>
+    </delete>
+
+    <!-- 获取所有渠道商信息 -->
+    <select id="getAllChannelInfo"
+            resultType="com.dreams.channel.po.ChannelPo"
+            parameterType="com.dreams.channel.bo.ChannelBo">
+        select * from i_pawn_channel
+        <where>
+            <if test="keyWord != null and keyWord != ''">
+                and (
+                CHANNEL_CODE like '%${keyWord}%'
+                or CHANNEL_NAME like '%${keyWord}%'
+                or MOBILE like '%${keyWord}%'
+                )
+            </if>
+        </where>
+    </select>
+
+    <!-- 根据渠道编号统计行数 -->
+    <select id="checkChannelCode" resultType="java.lang.Integer">
+        select  count(*) from i_pawn_channel where CHANNEL_CODE = #{channelCode}
+    </select>
+
+</mapper>

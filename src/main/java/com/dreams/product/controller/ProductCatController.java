@@ -76,6 +76,18 @@ public class ProductCatController
     }
 
     /**
+     * 根据分类编号删除一级分类及其子类信息
+     * @param catCodes 分类编号数组
+     * @return Map 集合,封装了对应的数据
+     */
+    @RequestMapping("/deleteBigCategoryInfo")
+    public Map<String,Object> deleteBigCategoryInfo(@RequestParam("catCodes[]") String [] catCodes)
+    {
+        return this.productCatService.deleteBigCategoryInfo(catCodes);
+    }
+
+
+    /**
      * 获取所有二级分类信息
      * @param productCatBo 商品分类实体类
      * @return Map 集合,封装了对应的数据

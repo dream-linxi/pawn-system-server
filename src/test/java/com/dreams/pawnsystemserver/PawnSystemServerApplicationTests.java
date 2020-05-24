@@ -1,7 +1,11 @@
 package com.dreams.pawnsystemserver;
 
+import com.dreams.channel.bo.ChannelBo;
+import com.dreams.channel.dao.ChannelDao;
+import com.dreams.channel.po.ChannelPo;
 import com.dreams.sys.po.MenuPo;
 import com.dreams.sys.service.MenuService;
+import lombok.ToString;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,6 +22,18 @@ public class PawnSystemServerApplicationTests {
 
     @Resource
     private MenuService menuService;
+
+    @Resource
+    private ChannelDao channelDao;
+
+    @Test
+    public void test()
+    {
+        List<ChannelPo> allChannelInfo = this.channelDao.getAllChannelInfo(new ChannelBo());
+        for (ChannelPo channelPo : allChannelInfo) {
+            System.out.println(channelPo);
+        }
+    }
 
     @Test
     public void contextLoads() {

@@ -5,7 +5,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-@MapperScan({"com.dreams.sys.dao","com.dreams.base.dao","com.dreams.product.dao"})
+@MapperScan({
+        "com.dreams.sys.dao",
+        "com.dreams.base.dao",
+        "com.dreams.product.dao",
+        "com.dreams.channel.dao"})
 public class PawnSystemServerApplication {
 
     public static void main(String[] args) {

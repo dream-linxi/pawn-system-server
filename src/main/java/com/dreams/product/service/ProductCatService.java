@@ -234,4 +234,15 @@ public class ProductCatService
         result.put("row",row);
         return result;
     }
+
+    /**
+     * 根据分类编号删除一级分类及其子类信息
+     * @param catCodes 分类编号数组
+     * @return Map 集合,封装了对应的数据
+     *  - row: 受影响行数
+     *
+     */
+    public Map<String, Object> deleteBigCategoryInfo(String[] catCodes) {
+        return null;
+    }
 }

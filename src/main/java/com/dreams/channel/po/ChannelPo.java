@@ -28,7 +28,7 @@ public class ChannelPo
     /* 账户名称 */
     private String accountName;
     /* 开户行 */
-    private String bandName;
+    private String bankName;
     /* 账号 */
     private String account;
     /* 会员数量 */

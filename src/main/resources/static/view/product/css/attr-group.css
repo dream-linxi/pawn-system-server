@@ -1,0 +1,22 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-color: gainsboro;
+}
+body #app {
+  padding: 15px;
+}
+body #app header {
+  background-color: #fff;
+  height: 50px;
+  margin-bottom: 10px;
+}
+body #app header .layui-form-item {
+  padding-top: 5px;
+}
+body #app section {
+  background-color: #fff;
+}
+body #app section .content-body {
+  padding: 8px;
+}

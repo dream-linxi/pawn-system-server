@@ -29,6 +29,247 @@
     </section>
 </div>
 
+<!-- 表格工具栏部分 -->
+<script type="text/html" id="channelToolBar">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="showAddChannelInfoWin">新增</button>
+        <button class="layui-btn layui-btn-sm" lay-event="showUpdateChannelInfoWin">修改</button>
+        <button class="layui-btn layui-btn-sm" lay-event="deleteChannelInfo">删除</button>
+    </div>
+</script>
+
+<!-- 新增渠道信息面板 -->
+<div id="addChannelInfoWin" style="width: 550px;height: 500px;padding: 15px 35px;display: none">
+    <form id="addChannelInfoForm" class="layui-form" action="">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">渠道编号</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="channelCode" lay-verify="required|checkChannelCode" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">渠道名</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="channelName" lay-verify="required" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">手机</label>
+                <div class="layui-input-inline">
+                    <input type="tel" name="mobile" lay-verify="required|phone" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">证件号码</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="idNo" lay-verify="required|number" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">账户名称</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="accountName" lay-verify="" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">开户行</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="bankName" lay-verify="" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">账号</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="account" lay-verify="number" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">会员数量</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="memberCount" lay-verify="number" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">累计充值</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="totalCharge" lay-verify="number" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">累计消费</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="consume" lay-verify="number" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">状态</label>
+            <div class="layui-input-block">
+                <input type="radio" name="channelStat" value="1" title="启用" checked="">
+                <input type="radio" name="channelStat" value="0" title="停用">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button onclick="addChannelInfo()" type="button" class="layui-btn" lay-submit="" lay-filter="addChannelInfoBtn">立即提交</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- 修改渠道信息面板 -->
+<div id="updateChannelInfoWin" style="width: 550px;height: 500px;padding: 15px 35px;display: none">
+    <form id="updateChannelInfoForm" lay-filter="udpateChannelInfoFilter" class="layui-form" action="">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">渠道编号</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="channelCode" readonly lay-verify="required" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">渠道名</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="channelName" lay-verify="required" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">手机</label>
+                <div class="layui-input-inline">
+                    <input type="tel" name="mobile" lay-verify="required|phone" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">证件号码</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="idNo" lay-verify="required|number" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">账户名称</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="accountName" lay-verify="" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">开户行</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="bankName" lay-verify="" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">账号</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="account" lay-verify="number" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">会员数量</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="memberCount" lay-verify="number" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">累计充值</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="totalCharge" lay-verify="number" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">累计消费</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="consume" lay-verify="number" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">状态</label>
+            <div class="layui-input-block">
+                <input type="radio" name="channelStat" value="1" title="启用">
+                <input type="radio" name="channelStat" value="0" title="停用">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button onclick="updateChannelInfo()" type="button" class="layui-btn" lay-submit="" lay-filter="updateChannelInfoBtn">立即提交</button>
+            </div>
+        </div>
+    </form>
+</div>
+
     <script src="https://cdn.bootcdn.net/ajax/libs/less.js/3.11.1/less.js"></script>
     <script src="../../layui/layui.all.js"></script>
     <script src="./js/channel.js"></script>

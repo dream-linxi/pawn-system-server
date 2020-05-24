@@ -47,8 +47,17 @@ function loadBigCategoryInfoTable() {
                         showUpdateBigCategoryInfoWin(checkStatus.data[0]);
                     }
                     break;
-                case 'update':
+                case 'deleteBigCategoryInfoWin':
                     layer.msg('编辑');
+                    if (data.length === 0) {
+                        layer.msg('请选择一行');
+                    } else {
+                        let catCodes = [];
+                        for (let cat of data) {
+                            catCodes.push(cat.catCode);
+                        }
+                        deleteBigCategoryInfoWin(catCodes);
+                    }
                     break;
             }
             ;
@@ -290,6 +299,30 @@ function updateBigCategoryInfo() {
     });
 }
 
+function deleteBigCategoryInfoWin(catCodes)
+{
+    layui.use(['form', 'table', 'layer'], function () {
+
+        let form = layui.form
+            , table = layui.table
+            , layer = layui.layer;
+
+
+        $.post('../../product/productcat/deleteBigCategoryInfo.json', {"catCodes": catCodes} , function (result) {
+            if (result.row > 0) {
+                // 重新加载 table
+                table.reload('BigCategoryTable', {
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                });
+                // 弹出提示信息
+                layer.alert("分类删除成功!!!")
+            }
+        }, 'json');
+
+    });
+}
 
 /**
  * 加载 def
