@@ -80,7 +80,7 @@ public class ProductCatController
      * @param catCodes 分类编号数组
      * @return Map 集合,封装了对应的数据
      */
-    @RequestMapping("/deleteBigCategoryInfo")
+    @RequestMapping("/deleteBigCategoryInfo.json")
     public Map<String,Object> deleteBigCategoryInfo(@RequestParam("catCodes[]") String [] catCodes)
     {
         return this.productCatService.deleteBigCategoryInfo(catCodes);

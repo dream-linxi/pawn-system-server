@@ -52,6 +52,30 @@
         </foreach>
     </delete>
 
+    <!-- 删除属性组和大类信息中间表 -->
+    <delete id="deleteAttrGroupCatRelByCatCodes">
+        delete from c_pawn_attr_group_cat_rel where CAT_CODE in
+        <foreach collection="array" open="(" close=")" separator="," item="catCode">
+            #{catCode}
+        </foreach>
+    </delete>
+
+    <!-- 删除品牌和大类信息中间表 -->
+    <delete id="deleteBrandCatRelByCatCodes">
+        delete from c_pawn_brand_cat_rel where CAT_CODE in
+        <foreach collection="array" open="(" close=")" separator="," item="catCode">
+            #{catCode}
+        </foreach>
+    </delete>
+
+    <!-- 删除大类信息 -->
+    <delete id="deleteBigCategoryByCatCodes">
+        delete from c_pawn_product_cat where CAT_CODE in
+        <foreach collection="array" open="(" close=")" separator="," item="catCode">
+            #{catCode}
+        </foreach>
+    </delete>
+
 
     <!-- 查询所有商品大类信息 -->
     <select id="getAllBigCategoryInfo" resultType="com.dreams.product.po.ProductCatPo">
@@ -135,7 +159,7 @@
         from
             c_pawn_product_cat
         <where>
-            CAT_LVL = 3
+            CAT_LVL = 3 and P_CAT_CODE=#{catCode}
             <if test="keyWord != null and keyWord != ''">
                 and (
                 CAT_CODE like '%${keyWord}%'
@@ -146,7 +170,8 @@
         </where>
     </select>
 
-    <select id="getAllSubCategoryInfoByNoPage" resultType="com.dreams.product.po.ProductCatPo">
-
+    <!-- 获取所有二级分类编号 -->
+    <select id="getSmallCategoryInfoByCatCode" resultType="java.lang.String">
+        select CAT_CODE from c_pawn_product_cat where P_CAT_CODE=#{catCode}
     </select>
 </mapper>

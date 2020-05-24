@@ -33,4 +33,11 @@ public interface ProductCatDao
 
     List<ProductCatPo> getAllSubCategoryInfo(ProductCatBo productCatBo);
 
+    void deleteAttrGroupCatRelByCatCodes(String[] catCodes);
+
+    void deleteBrandCatRelByCatCodes(String[] catCodes);
+
+    Integer deleteBigCategoryByCatCodes(String[] catCodes);
+
+    List<String> getSmallCategoryInfoByCatCode(@Value("catCode") String catCode);
 }

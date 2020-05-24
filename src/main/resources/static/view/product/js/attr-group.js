@@ -70,7 +70,7 @@ function loadProductPropInfoTable()
             let data = obj.data //获得当前行数据
                 , layEvent = obj.event; //获得 lay-event 对应的值
             if (layEvent === 'detail') {
-                location.href="./sub-category.html?catCode=" + data.catCode +"&catName=" + data.catName;
+                location.href="./attr-conf.html?groupCode=" + data.groupCode +"&groupName=" + data.groupName;
                 //console.log(data);
             }
         });

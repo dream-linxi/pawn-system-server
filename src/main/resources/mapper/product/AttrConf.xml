@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dreams.product.dao.AttrConfDao">
+
+    <!-- 新增属性信息 -->
+    <insert id="addAttrConfInfo" parameterType="com.dreams.product.po.AttrConfPo">
+        insert into c_pawn_attr_conf(ATTR_CODE,GROUP_CODE,ATTR_NAME,ATTR_TYPE,OPTIONS,SORT_NO)
+        values (#{attrCode},#{groupCode},#{attrName},#{attrType},#{options},#{sortNo})
+    </insert>
+
+    <!-- 更新属性信息 -->
+    <update id="updateAttrConfInfo" parameterType="com.dreams.product.po.AttrConfPo">
+        update
+            c_pawn_attr_conf
+        set
+            GROUP_CODE=#{groupCode},
+            ATTR_NAME=#{attrName},
+            ATTR_TYPE=#{attrType},
+            OPTIONS=#{options},
+            SORT_NO=#{sortNo}
+        where
+            ATTR_CODE=#{attrCode}
+    </update>
+
+    <!-- 删除属性信息 -->
+    <delete id="deleteAttrConfInfoByAttrCodes">
+        delete from c_pawn_attr_conf where ATTR_CODE in
+        <foreach collection="array" open="(" close=")" item="attrCode" separator=",">
+            #{attrCode}
+        </foreach>
+    </delete>
+
+    <select id="getAllAttrConfInfo"
+            resultType="com.dreams.product.po.AttrConfPo"
+            parameterType="com.dreams.product.bo.AttrConfBo">
+        select
+            ATTR_CODE as "attrCode",
+            GROUP_CODE as "groupCode",
+            ATTR_NAME as "attrName",
+            ATTR_TYPE as "attrType",
+            OPTIONS as "options",
+            SORT_NO as "sortNo"
+        from
+            c_pawn_attr_conf
+        <where>
+            GROUP_CODE=#{groupCode}
+            <if test="keyWord != null and keyWord != ''">
+                and (
+                ATTR_CODE like '%${keyWord}%'
+                or ATTR_NAME like '%${keyWord}%'
+                or ATTR_TYPE like '%${keyWord}%'
+                )
+            </if>
+        </where>
+
+    </select>
+
+    <!-- 统计当前编号记录数 -->
+    <select id="checkAttrCode" resultType="java.lang.Integer">
+        select count(*) from c_pawn_attr_conf where ATTR_CODE=#{attrCode}
+    </select>
+</mapper>

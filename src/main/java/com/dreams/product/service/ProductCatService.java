@@ -243,6 +243,27 @@ public class ProductCatService
      *
      */
     public Map<String, Object> deleteBigCategoryInfo(String[] catCodes) {
-        return null;
+        Map<String, Object> result = new HashMap<>();
+
+        this.productCatDao.deleteAttrGroupCatRelByCatCodes(catCodes);
+        this.productCatDao.deleteBrandCatRelByCatCodes(catCodes);
+
+        for (int i = 0; i < catCodes.length; i++) {
+            // 获取所有二级信息
+            List<String> smallCatCodes = this.productCatDao.getSmallCategoryInfoByCatCode(catCodes[i]);
+            // 根据二级分类编号获取三级分类编号
+            for (int j = 0; j < smallCatCodes.size(); j++) {
+                List<String> subCatgoryCodes = this.productCatDao.getSmallCategoryInfoByCatCode(smallCatCodes.get(j));
+                // 删除三级分类信息
+                this.productCatDao.deleteBigCategoryByCatCodes(subCatgoryCodes.toArray(new String[subCatgoryCodes.size()]));
+            }
+            // 删除二级分类信息
+            this.productCatDao.deleteBigCategoryByCatCodes(smallCatCodes.toArray(new String[smallCatCodes.size()]));
+        }
+        // 删除一级分类信息
+        Integer row = this.productCatDao.deleteBigCategoryByCatCodes(catCodes);
+
+        result.put("row",row);
+        return result;
     }
 }

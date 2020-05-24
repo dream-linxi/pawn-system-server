@@ -17,29 +17,152 @@
                 <div class="layui-input-inline">
                     <input id="keyWord" type="text" name="keyWord" class="layui-input">
                 </div>
-                <button onclick="searchSmallCategoryInfoByCondition()" type="button" class="layui-btn">搜索</button>
+                <button onclick="searchAttrConfInfoByCondition()" type="button" class="layui-btn">搜索</button>
             </div>
         </form>
     </header>
     <!-- 数据显示部分 -->
     <section>
         <div class="content-body">
-            <table class="layui-hide" id="smallCategoryTable" lay-filter="smallCategoryTableFilter"></table>
+            <table class="layui-hide" id="attrConfTable" lay-filter="attrConfTableFilter"></table>
         </div>
     </section>
 </div>
 
 <!-- 表格工具栏部分 -->
-<script type="text/html" id="smallCategoryToolBar">
+<script type="text/html" id="attrConfToolBar">
     <div class="layui-btn-container">
-        <button class="layui-btn layui-btn-sm" lay-event="showAddSmallCategoryInfoWin">新增</button>
-        <button class="layui-btn layui-btn-sm" lay-event="showUpdateSmallCategoryInfoWin">修改</button>
-        <button class="layui-btn layui-btn-sm" lay-event="deleteSmallCategoryInfo">删除</button>
+        <button class="layui-btn layui-btn-sm" lay-event="showAddAttrConfInfoWin">新增</button>
+        <button class="layui-btn layui-btn-sm" lay-event="showUpdateAttrConfInfoWin">修改</button>
+        <button class="layui-btn layui-btn-sm" lay-event="deleteAttrConfInfo">删除</button>
+        <button class="layui-btn layui-btn-sm" lay-event="returnAttrGroup">返回上级</button>
     </div>
 </script>
 
+<!-- 新增商品属性窗口 -->
+<div id="addAttrConfInfoWin"
+     style="width: 550px;padding: 15px 25px;display: none;">
+    <form id="addAttrConfInfoForm" class="layui-form">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">编号</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="attrCode" lay-verify="required|checkAttrCode" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">属性名称</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="attrName" lay-verify="required" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">排序</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="sortNo" lay-verify="required" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label" >属性可选</label>
+            <div class="layui-input-block">
+                <input type="radio" name="attrType" value="唯一属性" title="唯一属性" checked="">
+                <input type="radio" name="attrType" value="单选属性" title="单选属性">
+                <input type="radio" name="attrType" value="复选属性" title="复选属性">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">可选值列表</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="options" style="width: 270px;" lay-verify="required" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item" style="padding-top: 15px;">
+            <div class="layui-input-block">
+                <button onclick="addAttrConfInfo()" type="button" class="layui-btn" lay-submit=""
+                        lay-filter="addAttrConfInfoBtn">立即提交
+                </button>
+                <button type="button" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- 修改商品属性窗口 -->
+<div id="updateAttrConfInfoWin"
+     style="width: 550px;padding: 15px 25px;display: none;">
+    <form id="updateAttrConfInfoForm" lay-filter="updateAttrConfInfoFilter" class="layui-form">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">编号</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="attrCode" lay-verify="required" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">属性名称</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="attrName" lay-verify="required" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">排序</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="sortNo" lay-verify="required" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label" >属性可选</label>
+            <div class="layui-input-block">
+                <input type="radio" name="attrType" value="唯一属性" title="唯一属性" checked="">
+                <input type="radio" name="attrType" value="单选属性" title="单选属性">
+                <input type="radio" name="attrType" value="复选属性" title="复选属性">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">可选值列表</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="options" style="width: 270px;" lay-verify="required" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item" style="padding-top: 15px;">
+            <div class="layui-input-block">
+                <button onclick="updateAttrConfInfo()" type="button" class="layui-btn" lay-submit=""
+                        lay-filter="updateAttrConfInfoBtn">立即提交
+                </button>
+                <button type="button" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+</div>
+
 <script src="https://cdn.bootcdn.net/ajax/libs/less.js/3.11.1/less.js"></script>
 <script src="../../layui/layui.all.js"></script>
-<script src="./js/small-category.js"></script>
+<script src="./js/attr-conf.js"></script>
 </body>
 </html>

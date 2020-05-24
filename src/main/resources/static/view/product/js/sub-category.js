@@ -19,7 +19,7 @@ function loadSubCategoryInfoTable()
 
         table.render({
             elem: '#subCategoryTable'   // 表格 ID
-            , url: '../../product/productcat/getAllSubCategoryInfo.json'
+            , url: '../../product/productcat/getAllSubCategoryInfo.json?catCode=' + smallCatCode
             , title: '数据列表'
             , page: true    // 开启分页
             , toolbar: '#subCategoryToolBar'    // 工具栏
