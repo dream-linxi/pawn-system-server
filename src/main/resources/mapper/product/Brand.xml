@@ -76,4 +76,19 @@
     <select id="getAllCatCodeByBrandCode" resultType="java.lang.String">
         select CAT_CODE from c_pawn_brand_cat_rel where BRAND_CODE=#{brandCode}
     </select>
+
+    <select id="getAllBrandByCatCode" resultType="com.dreams.product.po.BrandPo">
+        select
+            BRAND_CODE as "brandCode",
+            BRAND_NAME as "brandName",
+            F_LETTER as "fletter",
+            BRAND_DESC as "brandDesc",
+            IS_SHOW as "isShow",
+            SORT_NO as "sortNo"
+        from
+            c_pawn_brand
+        where
+			BRAND_CODE in
+		(select BRAND_CODE from c_pawn_brand_cat_rel where CAT_CODE=#{catCode})
+    </select>
 </mapper>

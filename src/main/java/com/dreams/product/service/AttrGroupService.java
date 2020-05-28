@@ -112,4 +112,14 @@ public class AttrGroupService
         result.put("row",row);
         return result;
     }
+
+    public Map<String, Object> getAllAttrGroupByCatCode(String catCode)
+    {
+        Map<String, Object> result = new HashMap<>();
+
+        List<AttrGroupPo> attrGroupPos = this.attrGroupDao.getAllAttrGroupByCatCode(catCode);
+
+        result.put("result",attrGroupPos);
+        return result;
+    }
 }

@@ -50,4 +50,10 @@ public class AttrConfController
     {
         return this.attrConfService.deleteAttrConfInfoByAttrCodes(attrCodes);
     }
+
+    @RequestMapping("/getAllAttrConfByGroupCode.json")
+    public Map<String,Object> getAllAttrConfByGroupCode(@RequestParam("groupCode") String groupCode)
+    {
+        return this.attrConfService.getAllAttrConfByGroupCode(groupCode);
+    }
 }

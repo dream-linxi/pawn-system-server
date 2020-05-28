@@ -29,4 +29,6 @@ public interface BrandDao
     void deleteBrandAndCatInfoByBrandCode(@Value("brandCode") String brandCode);
 
     Integer deleteBrandInfoByBrandCodes(String[] brandCodes);
+
+    List<BrandPo> getAllBrandByCatCode(@Value("catCode") String catCode);
 }

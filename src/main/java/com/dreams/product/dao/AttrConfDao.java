@@ -24,4 +24,6 @@ public interface AttrConfDao
     Integer updateAttrConfInfo(AttrConfPo attrConfPo);
 
     Integer deleteAttrConfInfoByAttrCodes(String[] attrCodes);
+
+    List<AttrConfPo> getAllAttrConfByGroupCode(@Value("groupCode") String groupCode);
 }

@@ -61,4 +61,10 @@ public class AttrgroupController
     {
         return this.attrGroupService.deleteAttrGroupInfoByGroupCodes(groupCodes);
     }
+
+    @RequestMapping("/getAllAttrGroupByCatCode.json")
+    public Map<String, Object> getAllAttrGroupByCatCode(@RequestParam("catCode") String catCode)
+    {
+        return this.attrGroupService.getAllAttrGroupByCatCode(catCode);
+    }
 }

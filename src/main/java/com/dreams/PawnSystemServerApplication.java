@@ -9,7 +9,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
         "com.dreams.sys.dao",
         "com.dreams.base.dao",
         "com.dreams.product.dao",
-        "com.dreams.channel.dao"})
+        "com.dreams.channel.dao",
+        "com.dreams.goods.dao"})
 public class PawnSystemServerApplication {
 
     public static void main(String[] args) {

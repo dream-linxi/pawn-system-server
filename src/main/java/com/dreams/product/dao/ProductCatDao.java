@@ -40,4 +40,8 @@ public interface ProductCatDao
     Integer deleteBigCategoryByCatCodes(String[] catCodes);
 
     List<String> getSmallCategoryInfoByCatCode(@Value("catCode") String catCode);
+
+    List<ProductCatPo> getAllProductCatByPCatCode(@Value("pCatCode") String pCatCode);
+
+    ProductCatPo getProductCatByCatCode(@Value("catCode")String catCode);
 }

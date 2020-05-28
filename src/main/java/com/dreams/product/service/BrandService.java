@@ -159,4 +159,14 @@ public class BrandService
         result.put("row",row);
         return result;
     }
+
+    public Map<String, Object> getAllBrandByCatCode(String catCode)
+    {
+        Map<String, Object> result = new HashMap<>();
+
+        List<BrandPo> brandPos = this.brandDao.getAllBrandByCatCode(catCode);
+
+        result.put("result",brandPos);
+        return result;
+    }
 }

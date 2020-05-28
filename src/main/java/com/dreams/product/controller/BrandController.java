@@ -90,8 +90,13 @@ public class BrandController
     @RequestMapping("/deleteBrandInfoByBrandCodes.json")
     public Map<String, Object> deleteBrandInfoByBrandCodes(@RequestParam(value="brandCodes[]") String[] brandCodes)
     {
-
         return this.brandService.deleteBrandInfoByBrandCodes(brandCodes);
+    }
+
+    @RequestMapping("/getAllBrandByCatCode.json")
+    public Map<String, Object> getAllBrandByCatCode(@RequestParam("catCode") String catCode)
+    {
+        return this.brandService.getAllBrandByCatCode(catCode);
     }
 
 }

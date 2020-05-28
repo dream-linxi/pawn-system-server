@@ -33,4 +33,6 @@ public interface AttrGroupDao
     void deleteAttrGroupCatRelByGroupCodes(String[] groupCodes);
 
     void deleteAttrConfigInfoByGroupCodes(String[] groupCodes);
+
+    List<AttrGroupPo> getAllAttrGroupByCatCode(@Value("catCode") String catCode);
 }

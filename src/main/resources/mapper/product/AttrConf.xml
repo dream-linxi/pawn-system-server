@@ -61,4 +61,18 @@
     <select id="checkAttrCode" resultType="java.lang.Integer">
         select count(*) from c_pawn_attr_conf where ATTR_CODE=#{attrCode}
     </select>
+
+    <select id="getAllAttrConfByGroupCode" resultType="com.dreams.product.po.AttrConfPo">
+        select
+            ATTR_CODE as "attrCode",
+            GROUP_CODE as "groupCode",
+            ATTR_NAME as "attrName",
+            ATTR_TYPE as "attrType",
+            OPTIONS as "options",
+            SORT_NO as "sortNo"
+        from
+            c_pawn_attr_conf
+        where
+            GROUP_CODE=#{groupCode}
+    </select>
 </mapper>

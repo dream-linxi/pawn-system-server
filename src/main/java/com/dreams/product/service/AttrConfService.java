@@ -83,4 +83,15 @@ public class AttrConfService
 
         return result;
     }
+
+    public Map<String, Object> getAllAttrConfByGroupCode(String groupCode)
+    {
+        Map<String, Object> result = new HashMap<>();
+
+        List<AttrConfPo> attrConfPos = this.attrConfDao.getAllAttrConfByGroupCode(groupCode);
+
+        result.put("result", attrConfPos);
+
+        return result;
+    }
 }

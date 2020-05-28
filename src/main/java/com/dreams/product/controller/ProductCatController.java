@@ -151,4 +151,10 @@ public class ProductCatController
     {
         return this.productCatService.deleteSubCategoryInfo(catCodes);
     }
+
+    @RequestMapping("/getProductCatByCatCode.json")
+    public Map<String, Object> getProductCatByCatCode(@RequestParam("catCode") String catCode)
+    {
+        return this.productCatService.getProductCatByCatCode(catCode);
+    }
 }

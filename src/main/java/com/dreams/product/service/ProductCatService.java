@@ -266,4 +266,13 @@ public class ProductCatService
         result.put("row",row);
         return result;
     }
+
+    public Map<String, Object> getProductCatByCatCode(String catCode)
+    {
+        Map<String, Object> result = new HashMap<>();
+        ProductCatPo productCatPo = this.productCatDao.getProductCatByCatCode(catCode);
+
+        result.put("result",productCatPo);
+        return result;
+    }
 }

@@ -10,16 +10,27 @@
 </head>
 
 <body style="background-color: gainsboro;">
-    <div style="background-color: #fff;width: 450px;line-height: 50px;margin: 50px auto;">
-        <div class="layui-inline">
-            <label class="layui-form-label" style="line-height: 32px;font-size: 18px;">账号绑定</label>
-            <div class="layui-input-inline">
-                <input id="username" type="text" name="username" autocomplete="off" class="layui-input">
-                <input id="password" type="password" name="password" autocomplete="off" class="layui-input">
+    <div style="background-color: #fff;width: 450px;margin: 50px auto;padding: 15px;" class="layui-form">
+        <h2 style="text-align: center;margin-bottom: 25px;">账号绑定</h2>
+        <div class="layui-form-item">
+            <div class="layui-form-item">
+                <label class="layui-form-label">账号</label>
+                <div class="layui-input-inline">
+                    <input id="username" type="text" name="username" required lay-verify="required" placeholder="商品名称"
+                           autocomplete="off"
+                           class="layui-input">
+                </div>
             </div>
-            <button type="button" onclick="bangdingQQ()" class="layui-btn" style="margin-left: 15px;">绑定账号</button>
+            <div class="layui-form-item">
+                <label class="layui-form-label">密码</label>
+                <div class="layui-input-inline">
+                    <input id="password" type="password" name="password" required lay-verify="required" placeholder="商品名称"
+                           autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+            <button type="button" onclick="bangdingQQ()" class="layui-btn" style="margin-left: 150px;">绑定账号</button>
         </div>
-
     </div>
 </body>
 <script src="./layui/layui.all.js"></script>

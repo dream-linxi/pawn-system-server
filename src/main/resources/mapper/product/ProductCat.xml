@@ -19,10 +19,11 @@
             CAT_NAME=#{catName},
             CAT_DESC=#{catDesc},
             SORT_NO=#{sortNo},
-            P_CAT_CODE#{pCatCode},
+            P_CAT_CODE=#{pCatCode},
+            EVAL_PIC_DEF=#{evalPicDef},
             UNIT=#{unit},
             IS_SHOW=#{isShow}
-        where  CAT_CODE=#{catCode}
+        where CAT_CODE=#{catCode}
     </update>
 
     <!-- 更新二级分类信息 -->
@@ -173,5 +174,38 @@
     <!-- 获取所有二级分类编号 -->
     <select id="getSmallCategoryInfoByCatCode" resultType="java.lang.String">
         select CAT_CODE from c_pawn_product_cat where P_CAT_CODE=#{catCode}
+    </select>
+
+    <select id="getAllProductCatByPCatCode" resultType="com.dreams.product.po.ProductCatPo">
+        select
+            CAT_CODE as "catCode",
+            CAT_NAME as "catName",
+            P_CAT_CODE as "pCatCode",
+            CAT_LVL as "catLvl",
+            CAT_ROUTE as "catRoute",
+            UNIT as "unit",
+            CAT_DESC as "catDesc",
+            EVAL_PIC_DEF as "evalPicDef",
+            IS_SHOW as "isShow",
+            SORT_NO as "sortNo"
+        from
+            c_pawn_product_cat
+        where P_CAT_CODE=#{pCatCode}
+    </select>
+    <select id="getProductCatByCatCode" resultType="com.dreams.product.po.ProductCatPo">
+        select
+            CAT_CODE as "catCode",
+            CAT_NAME as "catName",
+            P_CAT_CODE as "pCatCode",
+            CAT_LVL as "catLvl",
+            CAT_ROUTE as "catRoute",
+            UNIT as "unit",
+            CAT_DESC as "catDesc",
+            EVAL_PIC_DEF as "evalPicDef",
+            IS_SHOW as "isShow",
+            SORT_NO as "sortNo"
+        from
+            c_pawn_product_cat
+        where CAT_CODE=#{catCode}
     </select>
 </mapper>

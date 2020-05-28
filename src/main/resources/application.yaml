@@ -12,7 +12,7 @@ spring:
 
 mybatis:
   type-aliases-package: com.dreams.sys.po
-  mapperLocations: classpath:mapper/sys/*.xml,mapper/base/*.xml,mapper/product/*.xml,mapper/channel/*.xml
+  mapperLocations: classpath:mapper/**/*.xml
   configuration:
     map-underscore-to-camel-case: true
 pagehelper:
