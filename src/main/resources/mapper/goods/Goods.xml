@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dreams.goods.dao.GoodsDao">
+
+    <insert id="addGoodsInfo" useGeneratedKeys="true" keyProperty="goodsId" parameterType="com.dreams.goods.po.GoodsPo">
+        insert into
+            i_pawn_goods(BRAND_CODE,CAT_CODE,SUB_CAT_CODE,DETAIL_CAT_CODE,GOODS_NAME,SHOP_CODE,WH_CODE,ARTICLE_NUMBER,GOODS_DESC,INPUT_USER,INPUT_DATE,CREATE_BY,CREATE_TIME,PIC_INFO,GOODS_STAT,GROUP_CODE,FIRST_PRICE)
+        values (#{brandCode},#{catCode},#{subCatCode},#{detailCatCode},#{goodsName},#{shopCode},#{whCode},#{articleNumber},#{goodsDesc},#{inputUser},#{inputDate},#{createBy},#{createTime},#{picInfo},#{goodsStat},#{groupCode},#{firstPrice})
+    </insert>
+
+    <insert id="addGoodsAndAttrInfo" parameterType="com.dreams.goods.po.GoodAndAttrPo">
+        insert into
+            i_pawn_goods_attr_rel(ATTR_CODE,GOODS_ID,ATTR_VALUE)
+         values (#{attrCode},#{goodsId},#{attrValue})
+    </insert>
+
+    <insert id="surveyGoodsInfo" parameterType="com.dreams.goods.po.GoodsIdentifyPo">
+        insert into i_pawn_goods_identify_log(GOODS_ID,GOODS_QUALITY,IDENTIFY_DESC,CREATE_BY,CREATE_TIME,IDENTIFY_RESULT)
+        values (#{goodsId},#{goodsQuality},#{identifyDesc},#{createBy},#{createTime},#{identifyResult})
+    </insert>
+
+    <insert id="assessGoodsInfo" parameterType="com.dreams.goods.po.GoodsAppraisePo">
+        insert into i_pawn_goods_appraise_log(GOODS_ID,OFFICIAL_PRICE,VALUATION_PRICE,PAWN_PRICE,RCHASE_PRICE,SELLING_PRICE,RENTAL_PRICE,APPRAISE_DESC,CREATE_BY,CREATE_TIME)
+        values (#{goodsId},#{officialPrice},#{valuationPrice},#{pawnPrice},#{rchasePrice},#{sellingPrice},#{rentalPrice},#{appraiseDesc},#{createBy},#{createTime})
+    </insert>
+
+    <update id="commitGoodsInfo">
+        update i_pawn_goods set GOODS_STAT='待鉴定' where GOODS_ID=#{goodsId}
+    </update>
+
+    <update id="updateGoodsInfo">
+        update i_pawn_goods
+        set
+            BRAND_CODE=#{brandCode},
+            CAT_CODE=#{catCode},
+            SUB_CAT_CODE=#{subCatCode},
+            DETAIL_CAT_CODE=#{detailCatCode},
+            GOODS_NAME=#{goodsName},
+            SHOP_CODE=#{shopCode},
+            WH_CODE=#{whCode},
+            ARTICLE_NUMBER=#{articleNumber},
+            GOODS_DESC=#{goodsDesc},
+            INPUT_USER=#{inputUser},
+            INPUT_DATE=#{inputDate},
+            PIC_INFO=#{picInfo},
+            GOODS_STAT=#{goodsStat},
+            GROUP_CODE=#{groupCode},
+            FIRST_PRICE=#{firstPrice}
+        where GOODS_ID=#{goodsId}
+    </update>
+    <update id="updateGoodsStatByGoodsId">
+        update i_pawn_goods set GOODS_STAT=#{goodsStat} where GOODS_ID=#{goodsId}
+    </update>
+
+    <delete id="deleteAttrConfAndGoodInfo">
+        delete from  i_pawn_goods_attr_rel where GOODS_ID in
+        <foreach collection="array" open="(" close=")" item="goodsId" separator=",">
+            #{goodsId}
+        </foreach>
+    </delete>
+
+
+    <delete id="delelteGoodsSurveyInfo">
+        delete from  i_pawn_goods_identify_log where GOODS_ID in
+        <foreach collection="array" open="(" close=")" item="goodsId" separator=",">
+            #{goodsId}
+        </foreach>
+    </delete>
+
+    <delete id="delelteGoodsAssessInfo">
+        delete from  i_pawn_goods_appraise_log where GOODS_ID in
+        <foreach collection="array" open="(" close=")" item="goodsId" separator=",">
+            #{goodsId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteGoodsInfoByGoodsIds">
+        delete from  i_pawn_goods where GOODS_ID in
+        <foreach collection="array" open="(" close=")" item="goodsId" separator=",">
+            #{goodsId}
+        </foreach>
+    </delete>
+
+    <select id="getAllGoodsInfo"
+            resultType="com.dreams.goods.po.GoodsPo"
+            parameterType="com.dreams.goods.bo.GoodsBo">
+        select
+        ipg.GOODS_ID as "goodsId",
+        ipg.SOURCE_GOODS_ID as "sourceGoodsId",
+        ipg.PROC_INST_ID as "procInstId",
+        ipg.BRAND_CODE as "brandCode",
+        ipg.CAT_CODE as "catCode",
+        ipg.SUB_CAT_CODE as "subCatCode",
+        ipg.DETAIL_CAT_CODE as "detailCatCode",
+        ipg.GOODS_NAME as "goodsName",
+        ipg.SHOP_CODE as "shopCode",
+        ipg.WH_CODE as "whCode",
+        ipg.ARTICLE_NUMBER as "articleNumber",
+        ipg.FIRST_PRICE as "firstPrice",
+        ipg.OFFICIAL_PRICE as "officialPrice",
+        ipg.VALUATION_PRICE as "valuationPrice",
+        ipg.PAWN_PRICE as "pawnPrice",
+        ipg.PURCHASE_PRICE as "purchasePrice",
+        ipg.SELLING_PRICE as "sellingPrice",
+        ipg.RENT_PRICE as "rentPrice",
+        ipg.BOTTOM_PRICE as "bottomPrice",
+        ipg.GOODS_DESC as "goodsDesc",
+        ipg.INPUT_USER as "inputUser",
+        ipg.INPUT_DATE as "inputDate",
+        ipg.SURVEYOR as "surveyor",
+        ipg.SURVEY_TIME as "surveyTime",
+        ipg.ASSESSOR as "assessor",
+        ipg.ASSESS_TIME as "assessTime",
+        ipg.IS_RENTABLE as "isRentable",
+        ipg.IS_SALABLE as "isSalable",
+        ipg.SOURCE_TYPE as "sourceType",
+        ipg.IS_IN_PROC as "isInProc",
+        ipg.STOCK_STAT as "stockStat",
+        ipg.GOODS_STAT as "goodsStat",
+        ipg.CREATE_BY as "createBy",
+        ipg.CREATE_TIME as "createTime",
+        ipg.MODIFY_BY as "modifyBy",
+        ipg.MODIFY_TIME as "modifyTime",
+        ipg.PIC_INFO as "picInfo",
+        ipg.GROUP_CODE as "groupCode",
+            CONCAT((select CAT_NAME from c_pawn_product_cat cppc where cppc.CAT_CODE = ipg.CAT_CODE),">",
+                    (select CAT_NAME from c_pawn_product_cat cppc where cppc.CAT_CODE = ipg.SUB_CAT_CODE),">",
+                    (select CAT_NAME from c_pawn_product_cat cppc where cppc.CAT_CODE = ipg.DETAIL_CAT_CODE)) as "catRouteStr"
+        from
+            i_pawn_goods ipg
+        <where>
+            <if test="goodsStat!=null and goodsStat!=''">
+                and ipg.GOODS_STAT = #{goodsStat}
+            </if>
+            <if test="inputUser!=null and inputUser!=''">
+                and ipg.INPUT_USER= #{inputUser}
+            </if>
+            <if test="keyWord!=null and keyWord!=''">
+                and (ipg.GOODS_NAME like '%${keyWord}%'
+                    or ipg.GOODS_ID like '%${keyWord}%')
+            </if>
+            <if test="searchStarteTime != null and searchStarteTime != ''">
+                and ipg.INPUT_DATE &gt;= #{searchStarteTime}
+            </if>
+            <if test="searchEndTime != null and searchEndTime != ''">
+                and ipg.INPUT_DATE &lt;= #{searchEndTime}
+            </if>
+        </where>
+    </select>
+    <select id="getAttrConfByGoodsId" resultType="com.dreams.goods.po.GoodAndAttrPo">
+        select ATTR_CODE as attrCode, ATTR_VALUE as "attrValue" from  i_pawn_goods_attr_rel
+        where GOODS_ID=#{goodsId}
+    </select>
+
+    <select id="getAllGoodsSurveyInfo" resultType="com.dreams.goods.po.GoodsIdentifyPo">
+        select
+            IDENTIFY_ID as "idenityId",
+            GOODS_QUALITY as "goodsQuality",
+            IDENTIFY_DESC as "identifyDesc",
+            IDENTIFY_RESULT as "identifyResult",
+            CREATE_BY as "createBy",
+            CREATE_TIME as "createTime"
+        from i_pawn_goods_identify_log
+        where
+            GOODS_ID=#{goodsId}
+    </select>
+
+    <select id="getAllGoodsAssessInfo" resultType="com.dreams.goods.po.GoodsAppraisePo">
+        select
+            APPRAISE_ID as "appraiseId",
+            OFFICIAL_PRICE as "officialPrice",
+            VALUATION_PRICE as "valuationPrice",
+            APPRAISE_DESC as "appraiseDesc",
+            CREATE_BY as "createBy",
+            CREATE_TIME as "createTime"
+        from i_pawn_goods_appraise_log
+        where
+            GOODS_ID=#{goodsId}
+    </select>
+</mapper>

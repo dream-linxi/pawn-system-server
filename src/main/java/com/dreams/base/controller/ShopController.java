@@ -109,4 +109,9 @@ public class ShopController
         return this.shopService.deleteShopInfoByShopCodes(shopCodes);
     }
 
+    @RequestMapping("/getAllShopInfoByNoPage.json")
+    public Map<String, Object> getAllShopInfoByNoPage()
+    {
+        return this.shopService.getAllShopInfoByNoPage();
+    }
 }

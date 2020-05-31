@@ -175,4 +175,14 @@ public class ShopService
         result.put("row",row);
         return result;
     }
+
+    public Map<String, Object> getAllShopInfoByNoPage() {
+        Map<String,Object> result = new HashMap<>();
+
+        List<ShopPo> shopPos = this.shopDao.getAllShopInfo(new ShopBo());
+
+        result.put("result",shopPos);
+
+        return result;
+    }
 }

@@ -157,4 +157,10 @@ public class ProductCatController
     {
         return this.productCatService.getProductCatByCatCode(catCode);
     }
+
+    @RequestMapping("/getAllProductCatByPCatCode.json")
+    public Map<String, Object> getAllProductCatByPCatCode(@RequestParam("pCatCode") String pCatCode)
+    {
+        return this.productCatService.getAllProductCatByPCatCode(pCatCode);
+    }
 }

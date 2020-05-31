@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../../layui/css/layui.css">
+    <link rel="stylesheet" href="./css/goods.css">
+    <script src="../../js/jquery-1.10.1.js"></script>
+</head>
+<body>
+<div id="app">
+    <!-- 搜索部分 -->
+    <header>
+        <form id="searchForm" class="layui-form">
+            <div class="layui-form-item">
+                <label class="layui-form-label">状态</label>
+                <div class="layui-input-inline" style="width: 120px;">
+                    <select id="goodsStat" name="goodsStat">
+                        <option value="">全部</option>
+                        <option value="待提交">待提交</option>
+                        <option value="待鉴定">待鉴定</option>
+                        <option value="待评估">待评估</option>
+                        <option value="已评估">已评估</option>
+                    </select>
+                </div>
+                <label class="layui-form-label">操作人</label>
+                <div class="layui-input-inline" style="width: 80px;">
+                    <input id="inputUserStr" type="text" name="inputUser" class="layui-input">
+                </div>
+
+                <label class="layui-form-label">关键字</label>
+                <div class="layui-input-inline">
+                    <input id="keyWord" type="text" name="keyWord" class="layui-input">
+                </div>
+                <label class="layui-form-label">录入日期</label>
+
+                <div class="layui-input-inline">
+                    <input type="text" class="layui-input" id="searchStarteTime" placeholder="yyyy-MM-dd">
+                </div>
+                <div class="layui-input-inline" style="width: auto;line-height: 35px;">
+                    ~
+                </div>
+                <div class="layui-input-inline">
+                    <input type="text" class="layui-input" id="searchEndTime" placeholder="yyyy-MM-dd">
+                </div>
+
+                <button onclick="searchGoodsInfoByCondition()" type="button" class="layui-btn">搜索</button>
+            </div>
+        </form>
+    </header>
+    <!-- 数据显示部分 -->
+    <section>
+        <div class="content-body">
+            <table class="layui-hide" id="goodsTable" lay-filter="goodsTableFilter"></table>
+        </div>
+    </section>
+
+    <!-- 表格工具栏部分 -->
+    <script type="text/html" id="goodsToolBar">
+        <div class="layui-btn-container">
+            <button class="layui-btn layui-btn-sm" lay-event="showAddGoodsInfoWin">新商品</button>
+            <button class="layui-btn layui-btn-sm" lay-event="commitGoodsInfo">提交</button>
+            <button class="layui-btn layui-btn-sm" lay-event="showUpdateGoodsInfoWin">修改</button>
+            <button class="layui-btn layui-btn-sm" lay-event="showSurveyGoodsInfoWin">鉴定</button>
+            <button class="layui-btn layui-btn-sm" lay-event="showAssessGoodsInfoWin">评估</button>
+            <button class="layui-btn layui-btn-sm" lay-event="deleteGoodsInfo">删除</button>
+        </div>
+    </script>
+
+    <!-- 属性信息窗口 -->
+    <div id="goodsInfoWin" style="width: 700px;height:auto;display: none;">
+        <form id="goodsInfoForm" class="layui-form" lay-filter="goodsInfoFilter">
+        <div class="layui-tab" lay-filter="current">
+            <ul class="layui-tab-title">
+                <li lay-id="one" id="goodsInfo" class="layui-this">商品信息</li>
+                <li lay-id="two" id="goodsAttr">商品属性</li>
+                <li lay-id="three" id="goodsPic">商品图片</li>
+                <li lay-id="four" id="goodsSurvey" style="display: none;">商品鉴定</li>
+                <li lay-id="five" id="goodsAssess" style="display: none;">商品评估</li>
+                <li lay-id="four" id="goodsSurveyInfo" style="display: none;">商品鉴定记录</li>
+                <li lay-id="five" id="goodsAssessInfo" style="display: none;">商品评估记录</li>
+            </ul>
+            <div class="layui-tab-content layui-form" style="padding: 15px 50px;">
+                <!-- 商品信息部分 -->
+                <div class="layui-tab-item layui-show">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">门店来源</label>
+                        <div class="layui-input-inline">
+                            <select id="shopCode" name="shopCode" lay-verify="required"></select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">录入人</label>
+                        <div class="layui-input-inline">
+                            <input id="inputUser" type="text" name="inputUser" required lay-verify="required" placeholder="录入人"
+                                   autocomplete="off"
+                                   class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">录入时间</label>
+                        <div class="layui-input-inline">
+                            <input id="inputDate" type="text" name="inputDate"  required lay-verify="required" placeholder="录入时间"
+                                   autocomplete="off"
+                                   class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">联动选择框</label>
+                        <div class="layui-input-inline" style="width: 120px;">
+                            <select id="catCode" name="catCode" lay-filter="catCodeFilter" lay-verify="required"></select>
+                        </div>
+                        <div class="layui-input-inline" style="width: 120px;">
+                            <select id="subCatCode" name="subCatCode" lay-filter="subCatCodeFilter"  lay-verify="required"></select>
+                        </div>
+                        <div class="layui-input-inline" style="width: 120px;">
+                            <select id="detailCatCode" name="detailCatCode" lay-verify="required"></select>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">商品名称</label>
+                        <div class="layui-input-inline">
+                            <input id="goodsName" type="text" name="goodsName" required lay-verify="required" placeholder="商品名称"
+                                   autocomplete="off"
+                                   class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">商品品牌</label>
+                        <div class="layui-input-inline">
+                            <select id="brandCode" name="brandCode">
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">商品货号</label>
+                        <div class="layui-input-inline">
+                            <input id="articleNumber" type="text" name="articleNumber" required lay-verify="required" placeholder="商品货号"
+                                   autocomplete="off"
+                                   class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">客户首买价格</label>
+                        <div class="layui-input-inline">
+                            <input id="firstPrice" type="text" name="firstPrice" required lay-verify="required" placeholder="客户首买价格"
+                                   autocomplete="off"
+                                   class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item layui-form-text">
+                        <label class="layui-form-label">商品描述</label>
+                        <div class="layui-input-block">
+                            <textarea id="goodsDesc" name="goodsDesc" placeholder="商品描述" class="layui-textarea"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <!-- 商品属性部分 -->
+                <div class="layui-tab-item">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">属性组</label>
+                        <div class="layui-input-inline">
+                            <select id="attrdGroupSelect" name="groupCode" lay-filter="attrGroupFilter">
+                            </select>
+                        </div>
+                    </div>
+                    <div id="attrs">
+
+                    </div>
+                </div>
+
+                <!-- 商品图片部分 -->
+                <div class="layui-tab-item">
+                    <div id="upPicsDiv">
+
+                    </div>
+                </div>
+
+                <!-- 商品鉴定部分 -->
+                <div class="layui-tab-item">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">新旧程度</label>
+                        <div class="layui-input-inline">
+                            <select id="goodsQuality" name="goodsQuality" lay-verify="required">
+                                <option value="5成">5成</option>
+                                <option value="6成">6成</option>
+                                <option value="7成">7成</option>
+                                <option value="8成">8成</option>
+                                <option value="9成">9成</option>
+                                <option value="10成">10成</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item layui-form-text">
+                        <label class="layui-form-label">鉴定描述</label>
+                        <div class="layui-input-block">
+                            <textarea name="identifyDesc" placeholder="鉴定描述" class="layui-textarea"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">单选框</label>
+                        <div class="layui-input-block">
+                            <input type="radio" name="identifyResult" value="鉴定为正品" title="鉴定为正品">
+                            <input type="radio" name="identifyResult" value="鉴定为假货" title="鉴定为假货">
+                            <input type="radio" name="identifyResult" value="资料不全" title="资料不全">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 商品评估部分 -->
+                <div class="layui-tab-item">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">官方价</label>
+                        <div class="layui-input-inline">
+                            <input id="officialPrice" type="text" name="officialPrice" placeholder="官方价"
+                                   autocomplete="off"
+                                   class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">评估价</label>
+                        <div class="layui-input-inline">
+                            <input id="valuationPrice" type="text" name="valuationPrice" placeholder="评估价"
+                                   autocomplete="off"
+                                   class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">典当价</label>
+                        <div class="layui-input-inline">
+                            <input id="pawnPrice" type="text" name="pawnPrice" placeholder="典当价"
+                                   autocomplete="off"
+                                   class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">收购价</label>
+                        <div class="layui-input-inline">
+                            <input id="rchasePrice" type="text" name="rchasePrice" placeholder="收购价"
+                                   autocomplete="off"
+                                   class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">售卖价</label>
+                        <div class="layui-input-inline">
+                            <input id="sellingPrice" type="text" name="sellingPrice" placeholder="售卖价"
+                                   autocomplete="off"
+                                   class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">租价</label>
+                        <div class="layui-input-inline">
+                            <input id="rentalPrice" type="text" name="rentalPrice" placeholder="租价"
+                                   autocomplete="off"
+                                   class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item layui-form-text">
+                        <label class="layui-form-label">评估描述</label>
+                        <div class="layui-input-block">
+                            <textarea name="appraiseDesc" placeholder="评估描述" class="layui-textarea"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-tab-item">
+                    <table class="layui-hide" id="goodsSurveyInfoTable" lay-filter="goodsSurveyInfoTable"></table>
+                </div>
+
+                <div class="layui-tab-item">
+                    <table class="layui-hide" id="goodsAssessInfoTable" lay-filter="goodsSurveyInfoTable"></table>
+                </div>
+
+                <div class="layui-form-item" style="display: none;">
+                    <div class="layui-input-block">
+                        <button id="goodsInfoBtn" class="layui-btn" lay-submit lay-filter="goodsInfoFilter">立即提交
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        </form>
+    </div>
+
+
+    <!-- 商品鉴定 -->
+
+
+
+    <script src="https://cdn.bootcdn.net/ajax/libs/less.js/3.11.1/less.js"></script>
+    <script src="../../layui/layui.all.js"></script>
+    <script src="./js/goods.js"></script>
+</div>
+</body>
+</html>

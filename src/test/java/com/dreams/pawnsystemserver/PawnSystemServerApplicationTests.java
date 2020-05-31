@@ -3,6 +3,9 @@ package com.dreams.pawnsystemserver;
 import com.dreams.channel.bo.ChannelBo;
 import com.dreams.channel.dao.ChannelDao;
 import com.dreams.channel.po.ChannelPo;
+import com.dreams.goods.bo.GoodsBo;
+import com.dreams.goods.dao.GoodsDao;
+import com.dreams.goods.po.GoodsPo;
 import com.dreams.sys.po.MenuPo;
 import com.dreams.sys.service.MenuService;
 import lombok.ToString;
@@ -19,65 +22,14 @@ import java.util.Map;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class PawnSystemServerApplicationTests {
-
     @Resource
-    private MenuService menuService;
-
-    @Resource
-    private ChannelDao channelDao;
+    private GoodsDao goodsDao;
 
     @Test
-    public void test()
-    {
-        List<ChannelPo> allChannelInfo = this.channelDao.getAllChannelInfo(new ChannelBo());
-        for (ChannelPo channelPo : allChannelInfo) {
-            System.out.println(channelPo);
+    public void test(){
+        List<GoodsPo> allGoodsInfo = this.goodsDao.getAllGoodsInfo(new GoodsBo());
+        for (GoodsPo goodsPo : allGoodsInfo) {
+            System.out.println(goodsPo);
         }
     }
-
-    @Test
-    public void contextLoads() {
-        Map<String, Object> allMenu = this.menuService.getAllMenu();
-        List<MenuPo> rootMenu = (List<MenuPo>) allMenu.get("data");
-        List<MenuPo> menuList = new ArrayList<MenuPo>();
-
-        for (int i = 0; i < rootMenu.size(); i++) {
-            // 一级菜单没有 pMenuId
-            if (rootMenu.get(i).getpMenuId().equals("-1")) {
-                menuList.add(rootMenu.get(i));
-            }
-        }
-
-        for (MenuPo menuPo : menuList) {
-            menuPo.setChildren(getChild(menuPo.getMenuId(), rootMenu));
-        }
-
-        for (MenuPo menuPo : menuList) {
-            System.out.println(menuPo);
-        }
-    }
-
-    private List<MenuPo> getChild(String id, List<MenuPo> rootMenu) {
-        List<MenuPo> childList = new ArrayList<>();
-        for (MenuPo menu : rootMenu) {
-            // 遍历所有节点，将父菜单id与传过来的id比较
-            if (menu.getpMenuId().equals(id)) {
-                childList.add(menu);
-            }
-        }
-
-        // 把子菜单的子菜单再循环一遍
-        for (MenuPo menu : childList) {// 没有url子菜单还有子菜单
-                // 递归
-                menu.setChildren(getChild(menu.getMenuId(), rootMenu));
-
-        }
-        if (childList.size() == 0) {
-            return null;
-        }
-        return childList;
-    }
-
-
-
 }
